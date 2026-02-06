@@ -90,7 +90,8 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(0, 0, 0, 0.05);
             overflow: hidden;
-            height: 300px;
+            height: auto;
+            min-height: 320px;
             display: flex;
             flex-direction: column;
         }
@@ -122,6 +123,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 140px;
         }
 
         .product-card-content p {
@@ -268,107 +270,227 @@
             opacity: 0;
             animation: slideInUp 0.5s ease-out forwards;
         }
+
+        .banner-carousel {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #000;
+        }
+
+        .banner-slide {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .banner-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .category-grid button {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
     </style>
 </head>
-<p style=""text-align:center>Сайтта обновления болып жатыр!</p>
-<body class="bg-gray-50 font-sans text-gray-900" style="display:none">
+<body class="bg-gray-50 font-sans text-gray-900">
 
-    <header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-30 p-4">
-        <input type="text" id="searchInput" placeholder="Поиск товаров..." class="w-full p-3 bg-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
-        <div id="categoryList" class="flex gap-2 mt-3 overflow-x-auto no-scrollbar py-1">
-            <button onclick="filterCat('Все')" class="cat-btn px-5 py-2 bg-blue-600 text-white rounded-full whitespace-nowrap text-sm font-bold shadow-md transition-all">Все</button>
-            <button onclick="filterCat('Напитки')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Напитки</button>
-            <button onclick="filterCat('Сладости')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Сладости</button>
-            <button onclick="filterCat('Канцелярия')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Канцелярия</button>
-            <button onclick="filterCat('Выпечка')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Выпечка</button>
-            <button onclick="filterCat('Печенье')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Печенье</button>
-            <button onclick="filterCat('Еда')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Еда</button>
-            <button onclick="filterCat('Гигиена')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Гигиена</button>
-        </div>
-    </header>
+    <div id="mainContent">
+        <header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-30 p-4">
+            <input type="text" id="searchInput" placeholder="Поиск товаров..." class="w-full p-3 bg-gray-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+            <div id="categoryList" class="flex gap-2 mt-3 overflow-x-auto no-scrollbar py-1">
+                <button onclick="filterCat('Все')" class="cat-btn px-5 py-2 bg-blue-600 text-white rounded-full whitespace-nowrap text-sm font-bold shadow-md transition-all">Все</button>
+                <button onclick="filterCat('Напитки')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Напитки</button>
+                <button onclick="filterCat('Сладости')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Сладости</button>
+                <button onclick="filterCat('Канцелярия')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Канцелярия</button>
+                <button onclick="filterCat('Выпечка')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Выпечка</button>
+                <button onclick="filterCat('Печенье')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Печенье</button>
+                <button onclick="filterCat('Еда')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Еда</button>
+                <button onclick="filterCat('Гигиена')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Гигиена</button>
+                <button onclick="filterCat('Молочные')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Молочные</button>
+                <button onclick="filterCat('Закуски')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Закуски</button>
+                <button onclick="filterCat('Фаст-фуд')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Фаст-фуд</button>
+                <button onclick="filterCat('Фрукты')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Фрукты</button>
+                <button onclick="filterCat('Другое')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Другое</button>
+                <button onclick="filterCat('Услуга')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Услуга</button>
+            </div>
+        </header>
 
-    <main class="pb-24">
-        <section class="mt-6 px-4">
-            <h2 class="font-black text-blue-600 text-lg uppercase tracking-wider mb-4 animate-slide-left">Хиты продаж</h2>
-            <div id="hitList" class="flex gap-3 overflow-x-auto no-scrollbar pb-2"></div>
-        </section>
-
-        <section class="mt-8 px-4 mb-8">
-            <h2 class="font-black text-xl mb-5 animate-slide-left">Каталог товаров</h2>
-            <div id="productList" class="grid grid-cols-2 gap-4"></div>
-        </section>
-    </main>
-
-    <button onclick="toggleAddModal(true)" class="fab-button fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition z-40 border-4 border-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
-    </button>
-
-    <div id="addModal" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
-        <div class="flex justify-between items-center mb-6 animate-slide-right">
-            <h2 class="text-2xl font-black">Новый товар</h2>
-            <button onclick="toggleAddModal(false)" class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-        </div>
-
-        <div class="space-y-4">
-            <label class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-200 rounded-[2.5rem] cursor-pointer bg-blue-50/30 hover:bg-blue-50 transition relative overflow-hidden group animate-scale-in">
-                <div id="imgPlaceholder" class="flex flex-col items-center text-blue-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                    <span class="font-bold">Нажмите, чтобы добавить фото</span>
+        <main class="pb-24">
+            <section class="mt-4 px-4">
+                <div id="bannerCarousel" class="banner-carousel">
+                    <img id="bannerSlide" class="banner-slide" src="https://via.placeholder.com/600x220/3b82f6/ffffff?text=Баннер+1" alt="Banner">
                 </div>
-                <input type="file" id="fImage" accept="image/*" class="hidden" onchange="previewImg(this)">
-                <img id="imgPreview" class="absolute inset-0 w-full h-full object-cover hidden">
-            </label>
+                <div class="flex justify-center gap-2 mt-3">
+                    <button onclick="prevBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300">←</button>
+                    <button onclick="nextBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300">→</button>
+                </div>
+            </section>
 
-            <input type="text" id="fTitle" placeholder="Название товара" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-            <input type="number" id="fPrice" placeholder="Цена (₸)" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            <section class="mt-6 px-4">
+                <h2 class="font-black text-blue-600 text-lg uppercase tracking-wider mb-4 animate-slide-left">Хиты продаж</h2>
+                <div id="hitList" class="flex gap-3 overflow-x-auto no-scrollbar pb-2"></div>
+            </section>
 
-            <select id="fCategory" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none transition-all">
-                <option value="">Выберите категорию</option>
-                <option value="Напитки">Напитки</option>
-                <option value="Сладости">Сладости</option>
-                <option value="Канцелярия">Канцелярия</option>
-                <option value="Выпечка">Выпечка</option>
-                <option value="Печенье">Печенье</option>
-                <option value="Еда">Еда</option>
-                <option value="Гигиена">Гигиена</option>
-            </select>
+            <section class="mt-8 px-4 mb-8">
+                <h2 class="font-black text-xl mb-5 animate-slide-left">Каталог товаров</h2>
+                <div id="productList" class="grid grid-cols-2 gap-4"></div>
+            </section>
+        </main>
 
-            <input type="tel" id="fPhone" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-            <input type="tel" id="fRoom" inputmode="numeric" maxlength="3" placeholder="Номер комнаты (3 цифры)" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+        <button onclick="toggleAddModal(true)" class="fab-button fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition z-40 border-4 border-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+        </button>
 
-            <div class="grid grid-cols-2 gap-3">
-                <input type="tel" id="fOwnerCode" inputmode="numeric" placeholder="Код (5 цифр)" class="p-4 bg-gray-50 rounded-2xl text-center font-bold ring-1 ring-gray-200 outline-none transition-all">
-                <input type="tel" id="fAdminCode" inputmode="numeric" placeholder="Админ пароль" class="p-4 bg-gray-50 rounded-2xl text-center font-bold ring-1 ring-gray-200 outline-none transition-all">
+        <div id="addModal" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 animate-slide-right">
+                <h2 class="text-2xl font-black">Новый товар</h2>
+                <button onclick="toggleAddModal(false)" class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
             </div>
 
-            <button id="submitBtn" onclick="submitProduct()" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl">
-                ОПУБЛИКОВАТЬ
-            </button>
+            <div class="space-y-4">
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Фото товара</label>
+                    <label class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-200 rounded-[2.5rem] cursor-pointer bg-blue-50/30 hover:bg-blue-50 transition relative overflow-hidden group animate-scale-in">
+                        <div id="imgPlaceholder" class="flex flex-col items-center text-blue-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <span class="font-bold">Нажмите, чтобы добавить фото</span>
+                        </div>
+                        <input type="file" id="fImage" accept="image/*" class="hidden" onchange="previewImg(this)">
+                        <img id="imgPreview" class="absolute inset-0 w-full h-full object-cover hidden">
+                    </label>
+                    <div class="error-message" id="imgError">Выберите фото товара</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Название товара</label>
+                    <input type="text" id="fTitle" placeholder="Название товара" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <div class="error-message" id="titleError">Укажите название товара</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Цена (₸)</label>
+                    <input type="number" id="fPrice" placeholder="Цена (₸)" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <div class="error-message" id="priceError">Укажите цену товара</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Категория</label>
+                    <div class="category-grid">
+                        <select id="fCategory" class="col-span-2 p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none transition-all">
+                            <option value="">Выберите категорию</option>
+                            <option value="Напитки">Напитки</option>
+                            <option value="Сладости">Сладости</option>
+                            <option value="Канцелярия">Канцелярия</option>
+                            <option value="Выпечка">Выпечка</option>
+                            <option value="Печенье">Печенье</option>
+                            <option value="Еда">Еда</option>
+                            <option value="Гигиена">Гигиена</option>
+                            <option value="Молочные">Молочные</option>
+                            <option value="Закуски">Закуски</option>
+                            <option value="Фаст-фуд">Фаст-фуд</option>
+                            <option value="Фрукты">Фрукты</option>
+                            <option value="Другое">Другое</option>
+                            <option value="Услуга">Услуга</option>
+                        </select>
+                    </div>
+                    <div class="error-message" id="categoryError">Выберите категорию товара</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Номер телефона</label>
+                    <input type="tel" id="fPhone" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <div class="error-message" id="phoneError">Укажите номер телефона</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">Номер комнаты</label>
+                    <input type="tel" id="fRoom" inputmode="numeric" maxlength="3" placeholder="Номер комнаты (3 цифры)" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <div class="error-message" id="roomError">Номер комнаты - 3 цифры</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="required-field block mb-2 font-bold text-sm text-xs">Код (5 цифр)</label>
+                        <input type="tel" id="fOwnerCode" inputmode="numeric" placeholder="Код" class="w-full p-4 bg-gray-50 rounded-2xl text-center font-bold ring-1 ring-gray-200 outline-none transition-all">
+                        <div class="error-message" id="codeError">Код - 5 цифр</div>
+                    </div>
+                    <div>
+                        <label class="required-field block mb-2 font-bold text-sm text-xs">Админ пароль</label>
+                        <input type="tel" id="fAdminCode" inputmode="numeric" placeholder="Пароль" class="w-full p-4 bg-gray-50 rounded-2xl text-center font-bold ring-1 ring-gray-200 outline-none transition-all">
+                        <div class="error-message" id="adminError">Укажите пароль</div>
+                    </div>
+                </div>
+
+                <button id="submitBtn" onclick="submitProduct()" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl">
+                    ОПУБЛИКОВАТЬ
+                </button>
+            </div>
+        </div>
+
+        <div id="detailModal" class="fixed inset-0 bg-white z-50 hidden flex-col overflow-y-auto">
+            <div class="p-4 flex items-center justify-between border-b sticky top-0 bg-white/90 backdrop-blur-md z-10">
+                <button onclick="toggleDetailModal(false)" class="text-blue-600 font-bold flex items-center gap-1 hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Назад
+                </button>
+                <span class="font-bold text-gray-400">Товар</span>
+                <div class="w-10"></div>
+            </div>
+            <div id="detailContent" class="detail-modal-content"></div>
+        </div>
+
+        <div id="deleteModal" class="fixed inset-0 overlay z-50 hidden flex items-end">
+            <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
+                <h3 class="text-xl font-black mb-6">Удалить объявление?</h3>
+                <p class="text-gray-500 mb-6">Введите 5-значный код удаления</p>
+                <input type="tel" id="deleteCode" inputmode="numeric" placeholder="Код удаления" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none mb-4 transition-all">
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="closeDeleteModal()" class="py-4 rounded-2xl font-bold border border-gray-200 hover:bg-gray-50 transition-all">Отмена</button>
+                    <button onclick="confirmDelete()" class="py-4 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all">Удалить</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="detailModal" class="fixed inset-0 bg-white z-50 hidden flex-col overflow-y-auto">
-        <div class="p-4 flex items-center justify-between border-b sticky top-0 bg-white/90 backdrop-blur-md z-10">
-            <button onclick="toggleDetailModal(false)" class="text-blue-600 font-bold flex items-center gap-1 hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Назад
-            </button>
-            <span class="font-bold text-gray-400">Товар</span>
-            <div class="w-10"></div>
-        </div>
-        <div id="detailContent" class="detail-modal-content"></div>
-    </div>
-
-    <div id="deleteModal" class="fixed inset-0 overlay z-50 hidden flex items-end">
-        <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
-            <h3 class="text-xl font-black mb-6">Удалить объявление?</h3>
-            <p class="text-gray-500 mb-6">Введите 5-значный код удаления</p>
-            <input type="tel" id="deleteCode" inputmode="numeric" placeholder="Код удаления" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none mb-4 transition-all">
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="closeDeleteModal()" class="py-4 rounded-2xl font-bold border border-gray-200 hover:bg-gray-50 transition-all">Отмена</button>
-                <button onclick="confirmDelete()" class="py-4 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all">Удалить</button>
+    <div id="updatingScreen" class="fixed inset-0 bg-white z-50 hidden flex flex-col items-center justify-center">
+        <div class="text-center animate-fade-in">
+            <div class="mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-blue-600 mx-auto animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
             </div>
+            <h1 class="text-3xl font-black text-gray-800 mb-2">Сайтта обновления</h1>
+            <p class="text-gray-500 text-lg mb-8">Сайтта реконструкция жүріп жатыр</p>
+            <p class="text-gray-400 text-sm">Кешірек келіңіз...</p>
         </div>
     </div>
 
@@ -379,6 +501,8 @@
         const ADMIN_PASS = "55555";
 
         let allProducts = [];
+        let allBanners = [];
+        let currentBannerIdx = 0;
         let currentCat = 'Все';
         let deleteData = null;
 
@@ -397,8 +521,36 @@
         }
 
         async function loadData() {
-            const { data, error } = await client.from('products').select('*').order('created_at', { ascending: false });
-            if (!error) { allProducts = data; render(); }
+            const { data: prods, error: prodErr } = await client.from('products').select('*').order('created_at', { ascending: false });
+            if (!prodErr) allProducts = prods;
+            
+            const { data: banners, error: bannerErr } = await client.from('banners').select('*').order('order', { ascending: true });
+            if (!bannerErr) allBanners = banners;
+            
+            render();
+            updateBanner();
+        }
+
+        function updateBanner() {
+            if (allBanners.length > 0) {
+                const banner = allBanners[currentBannerIdx];
+                const slide = document.getElementById('bannerSlide');
+                if (banner.type === 'image') {
+                    slide.outerHTML = `<img id="bannerSlide" class="banner-slide" src="${banner.url}" alt="Banner">`;
+                } else if (banner.type === 'video') {
+                    slide.outerHTML = `<video id="bannerSlide" class="banner-slide" autoplay muted loop><source src="${banner.url}" type="video/mp4"></video>`;
+                }
+            }
+        }
+
+        function nextBanner() {
+            currentBannerIdx = (currentBannerIdx + 1) % allBanners.length;
+            updateBanner();
+        }
+
+        function prevBanner() {
+            currentBannerIdx = (currentBannerIdx - 1 + allBanners.length) % allBanners.length;
+            updateBanner();
         }
 
         document.getElementById('fPrice').addEventListener('input', e => {
@@ -412,6 +564,55 @@
         document.getElementById('fRoom').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3));
         document.getElementById('fOwnerCode').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5));
         document.getElementById('searchInput').addEventListener('input', render);
+
+        function hideAllErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+        }
+
+        function showError(fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) el.classList.add('show');
+        }
+
+        function validateForm() {
+            hideAllErrors();
+            let valid = true;
+
+            if (!document.getElementById('fImage').files[0]) {
+                showError('imgError');
+                valid = false;
+            }
+            if (!document.getElementById('fTitle').value.trim()) {
+                showError('titleError');
+                valid = false;
+            }
+            if (!document.getElementById('fPrice').value) {
+                showError('priceError');
+                valid = false;
+            }
+            if (!document.getElementById('fCategory').value) {
+                showError('categoryError');
+                valid = false;
+            }
+            if (!document.getElementById('fPhone').value || document.getElementById('fPhone').value.replace(/\D/g, '').length < 11) {
+                showError('phoneError');
+                valid = false;
+            }
+            if (document.getElementById('fRoom').value.length !== 3) {
+                showError('roomError');
+                valid = false;
+            }
+            if (document.getElementById('fOwnerCode').value.length !== 5) {
+                showError('codeError');
+                valid = false;
+            }
+            if (!document.getElementById('fAdminCode').value) {
+                showError('adminError');
+                valid = false;
+            }
+
+            return valid;
+        }
 
         function toggleAddModal(s) {
             document.getElementById('addModal').classList.toggle('hidden', !s);
@@ -431,6 +632,7 @@
             document.getElementById('imgPreview').src = "";
             document.getElementById('imgPreview').classList.add('hidden');
             document.getElementById('imgPlaceholder').classList.remove('hidden');
+            hideAllErrors();
 
             const btn = document.getElementById('submitBtn');
             btn.className = "w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl";
@@ -448,21 +650,20 @@
         }
 
         async function submitProduct() {
+            if (!validateForm()) return;
+
             const btn = document.getElementById('submitBtn');
             const adminInput = document.getElementById('fAdminCode').value;
-            const roomInput = document.getElementById('fRoom').value;
             const imgFile = document.getElementById('fImage').files[0];
 
             if (adminInput !== ADMIN_PASS) return showError("Неверный админ пароль!");
-            if (roomInput.length !== 3) return showError("Номер комнаты - 3 цифры!");
-            if (!imgFile) return showError("Выберите фото!");
 
             btn.disabled = true;
             btn.innerText = "Загрузка...";
 
             try {
                 const fileName = `${Date.now()}_${imgFile.name}`;
-                const { data: imgData, error: imgErr } = await client.storage.from('product photo').upload(fileName, imgFile);
+                const { error: imgErr } = await client.storage.from('product photo').upload(fileName, imgFile);
                 if (imgErr) throw imgErr;
 
                 const { data: publicUrl } = client.storage.from('product photo').getPublicUrl(fileName);
@@ -472,7 +673,7 @@
                     price: parseInt(document.getElementById('fPrice').value),
                     category: document.getElementById('fCategory').value,
                     phone: document.getElementById('fPhone').value,
-                    room_number: roomInput,
+                    room_number: document.getElementById('fRoom').value,
                     owner_code: document.getElementById('fOwnerCode').value,
                     image_url: publicUrl.publicUrl
                 }]);
@@ -487,7 +688,7 @@
                 }, 2500);
 
             } catch (err) {
-                showError("Ошибка: " + err.message);
+                alert("Ошибка: " + err.message);
                 btn.disabled = false;
                 btn.innerText = "ОПУБЛИКОВАТЬ";
             }
@@ -646,6 +847,27 @@
             }
         }
         loadData();
+
+        function showUpdatingScreen() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('updatingScreen').classList.remove('hidden');
+        }
+
+        function hideUpdatingScreen() {
+            document.getElementById('updatingScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+       
+
+        // Мысалы: 5 секунд ішінде обновления аяқталсын
+
+        showUpdatingScreen();
+        setTimeout(() => {
+            hideUpdatingScreen();
+        }, 100000000000000000000);
+
+
     </script>
 </body>
 </html>
