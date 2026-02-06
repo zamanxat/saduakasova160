@@ -282,12 +282,36 @@
             width: 100%;
             height: 220px;
             object-fit: cover;
+            animation: bannerFadeIn 0.8s ease-in-out;
         }
 
         .banner-slide video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            animation: bannerFadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes bannerFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bannerSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .error-message {
@@ -346,7 +370,7 @@
         <main class="pb-24">
             <section class="mt-4 px-4">
                 <div id="bannerCarousel" class="banner-carousel">
-                    <img id="bannerSlide" class="banner-slide" src="https://via.placeholder.com/600x220/3b82f6/ffffff?text=Баннер+1" alt="Banner">
+                    <img id="bannerSlide" class="banner-slide" src="https://avatars.mds.yandex.net/i?id=ed409b9db462783941078ea25317901aaadec7b2-1980598-images-thumbs&n=13" alt="Banner">
                 </div>
                 <div class="flex justify-center gap-2 mt-3">
                     <button onclick="prevBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300">←</button>
@@ -368,6 +392,26 @@
         <button onclick="toggleAddModal(true)" class="fab-button fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition z-40 border-4 border-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
         </button>
+
+        <div id="adminPanel" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 animate-slide-right">
+                <h2 class="text-2xl font-black">Админ Панель</h2>
+                <button onclick="toggleAdminPanel(false)" class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Админ пароль бөлімі -->
+                <div class="border-t pt-6">
+                    <h3 class="text-lg font-black mb-4">Админ пароль</h3>
+                    <input type="text" id="newAdminPass" placeholder="Жаңа пароль" class="w-full p-3 bg-gray-50 rounded-xl border ring-1 ring-gray-200 outline-none mb-3">
+                    <button onclick="updateAdminPass()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all">
+                        Пароль өзгерту
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div id="addModal" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
             <div class="flex justify-between items-center mb-6 animate-slide-right">
@@ -500,8 +544,18 @@
         const client = supabase.createClient(SB_URL, SB_KEY);
         const ADMIN_PASS = "55555";
 
+        // БАННЕРЛАР - КОД АРҚЫЛЫ ӨЗГЕРТУ
+
+        const BANNERS = [
+            { url: 'https://nesvizh.by/images/firm-news/932/banner.jpg', type: 'image' },
+            { url: 'https://rostov.reklama-gravity.ru/wp-content/uploads/2023/09/1_fxVUxHlAJr2axlQHEyjjNw.jpg', type: 'image' },
+            { url: 'https://avatars.mds.yandex.net/i?id=ed409b9db462783941078ea25317901aaadec7b2-1980598-images-thumbs&n=13', type: 'image' }
+            // Басқа баннерлар қосыңыз:
+            // { url: 'https://example.com/banner3.jpg', type: 'image' },
+            // { url: 'https://example.com/video.mp4', type: 'video' }
+        ];
+
         let allProducts = [];
-        let allBanners = [];
         let currentBannerIdx = 0;
         let currentCat = 'Все';
         let deleteData = null;
@@ -524,32 +578,89 @@
             const { data: prods, error: prodErr } = await client.from('products').select('*').order('created_at', { ascending: false });
             if (!prodErr) allProducts = prods;
             
-            const { data: banners, error: bannerErr } = await client.from('banners').select('*').order('order', { ascending: true });
-            if (!bannerErr) allBanners = banners;
-            
             render();
             updateBanner();
+            startBannerAutoPlay();
+        }
+
+        let bannerAutoPlayInterval = null;
+
+        function startBannerAutoPlay() {
+            if (BANNERS.length > 1) {
+                if (bannerAutoPlayInterval) clearInterval(bannerAutoPlayInterval);
+                bannerAutoPlayInterval = setInterval(() => {
+                    nextBanner();
+                }, 10000); // 10 секунд
+            }
+        }
+
+        function stopBannerAutoPlay() {
+            if (bannerAutoPlayInterval) {
+                clearInterval(bannerAutoPlayInterval);
+                bannerAutoPlayInterval = null;
+            }
         }
 
         function updateBanner() {
-            if (allBanners.length > 0) {
-                const banner = allBanners[currentBannerIdx];
-                const slide = document.getElementById('bannerSlide');
-                if (banner.type === 'image') {
-                    slide.outerHTML = `<img id="bannerSlide" class="banner-slide" src="${banner.url}" alt="Banner">`;
-                } else if (banner.type === 'video') {
-                    slide.outerHTML = `<video id="bannerSlide" class="banner-slide" autoplay muted loop><source src="${banner.url}" type="video/mp4"></video>`;
-                }
+            if (BANNERS.length === 0) return;
+            
+            const banner = BANNERS[currentBannerIdx % BANNERS.length];
+            const slide = document.getElementById('bannerSlide');
+            
+            if (banner.type === 'image') {
+                const newImg = document.createElement('img');
+                newImg.id = 'bannerSlide';
+                newImg.className = 'banner-slide';
+                newImg.src = banner.url;
+                newImg.alt = 'Banner';
+                newImg.style.animation = 'bannerFadeIn 0.8s ease-in-out';
+                slide.replaceWith(newImg);
+            } else if (banner.type === 'video') {
+                const newVideo = document.createElement('video');
+                newVideo.id = 'bannerSlide';
+                newVideo.className = 'banner-slide';
+                newVideo.autoplay = true;
+                newVideo.muted = true;
+                newVideo.loop = true;
+                newVideo.style.animation = 'bannerFadeIn 0.8s ease-in-out';
+                const source = document.createElement('source');
+                source.src = banner.url;
+                source.type = 'video/mp4';
+                newVideo.appendChild(source);
+                slide.replaceWith(newVideo);
+            }
+
+            updateBannerDots();
+            stopBannerAutoPlay();
+            startBannerAutoPlay();
+        }
+
+        function updateBannerDots() {
+            const dotsContainer = document.getElementById('bannerDots');
+            if (!dotsContainer || BANNERS.length === 0) return;
+            
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < BANNERS.length; i++) {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-500 ${i === currentBannerIdx % BANNERS.length ? 'bg-blue-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    currentBannerIdx = i;
+                    updateBanner();
+                };
+                dotsContainer.appendChild(dot);
             }
         }
 
         function nextBanner() {
-            currentBannerIdx = (currentBannerIdx + 1) % allBanners.length;
+            if (BANNERS.length === 0) return;
+            currentBannerIdx = (currentBannerIdx + 1) % BANNERS.length;
             updateBanner();
         }
 
         function prevBanner() {
-            currentBannerIdx = (currentBannerIdx - 1 + allBanners.length) % allBanners.length;
+            if (BANNERS.length === 0) return;
+            currentBannerIdx = (currentBannerIdx - 1 + BANNERS.length) % BANNERS.length;
             updateBanner();
         }
 
@@ -656,10 +767,9 @@
             const adminInput = document.getElementById('fAdminCode').value;
             const imgFile = document.getElementById('fImage').files[0];
 
-            if (adminInput !== ADMIN_PASS) return showError("Неверный админ пароль!");
+            if (adminInput !== ADMIN_PASS) return showErrorModal("Неверный админ пароль!");
 
-            btn.disabled = true;
-            btn.innerText = "Загрузка...";
+            showUpdatingScreen();
 
             try {
                 const fileName = `${Date.now()}_${imgFile.name}`;
@@ -675,26 +785,24 @@
                     phone: document.getElementById('fPhone').value,
                     room_number: document.getElementById('fRoom').value,
                     owner_code: document.getElementById('fOwnerCode').value,
-                    image_url: publicUrl.publicUrl
+                    image_url: publicUrl.publicUrl,
+                    is_hit: false
                 }]);
                 if (dbErr) throw dbErr;
 
-                btn.classList.replace('bg-blue-600', 'bg-green-500');
-                btn.innerText = "Успешно добавлено!";
-
                 setTimeout(() => {
+                    hideUpdatingScreen();
                     toggleAddModal(false);
                     loadData();
-                }, 2500);
+                }, 2000);
 
             } catch (err) {
-                alert("Ошибка: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "ОПУБЛИКОВАТЬ";
+                hideUpdatingScreen();
+                showErrorModal("Ошибка: " + err.message);
             }
         }
 
-        function showError(msg) {
+        function showErrorModal(msg) {
             const modal = document.createElement('div');
             modal.className = "fixed inset-0 overlay z-50 flex items-end";
             modal.innerHTML = `
@@ -707,11 +815,28 @@
         }
 
         function getRandomRelated(allProds, currentProd, limit = 6) {
-            const similar = allProds.filter(p => p.id !== currentProd.id && p.category === currentProd.category);
+            // Бірінші, бір категорияның товарларын табу
+            let similar = allProds.filter(p => p.id !== currentProd.id && p.category === currentProd.category);
+            
+            // Егер категорияда басқа товар болмаса, барлық товардан таңдау
+            if (similar.length === 0) {
+                similar = allProds.filter(p => p.id !== currentProd.id);
+            } else if (similar.length < limit) {
+                // Егер категорияда 6-дан аз болса, басқа категориялардан қосу
+                const otherProducts = allProds.filter(p => 
+                    p.id !== currentProd.id && 
+                    p.category !== currentProd.category &&
+                    !similar.find(s => s.id === p.id)
+                );
+                similar = similar.concat(otherProducts.slice(0, limit - similar.length));
+            }
+            
+            // Аралау
             for (let i = similar.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [similar[i], similar[j]] = [similar[j], similar[i]];
             }
+            
             return similar.slice(0, limit);
         }
 
@@ -788,7 +913,7 @@
                 toggleDetailModal(false);
                 loadData();
             } else if(input) {
-                showError("Неверный код!");
+                showErrorModal("Неверный код!");
             }
         }
 
@@ -796,9 +921,20 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             const hitBox = document.getElementById('hitList');
             const proBox = document.getElementById('productList');
-            hitBox.innerHTML = ""; proBox.innerHTML = "";
+            hitBox.innerHTML = ""; 
+            proBox.innerHTML = "";
 
-            allProducts.slice(0, 6).forEach((p, index) => {
+            // ХИТЫ ПРОДАЖ - is_hit true болғандарын тапу
+            let hitProducts = allProducts.filter(p => p.is_hit === true);
+            
+            // Егер хит өнім болмаса, ең соңғы 10 өнімді қосу
+            if (hitProducts.length === 0) {
+                hitProducts = allProducts.slice(0, 10);
+            } else {
+                hitProducts = hitProducts.slice(0, 10);
+            }
+
+            hitProducts.forEach((p, index) => {
                 const d = document.createElement('div');
                 d.className = "hit-card p-3 cursor-pointer stagger-item";
                 d.style.animationDelay = `${0.08 * index}s`;
@@ -846,7 +982,6 @@
                 });
             }
         }
-        loadData();
 
         function showUpdatingScreen() {
             document.getElementById('mainContent').classList.add('hidden');
@@ -858,15 +993,14 @@
             document.getElementById('mainContent').classList.remove('hidden');
         }
 
-       
-
         // Мысалы: 5 секунд ішінде обновления аяқталсын
 
-        showUpdatingScreen();
-        setTimeout(() => {
-            hideUpdatingScreen();
-        }, 100000000000000000000);
+        // showUpdatingScreen();
+        // setTimeout(() => {
+        //     hideUpdatingScreen();
+        // }, 10000000);
 
+        loadData();
 
     </script>
 </body>
