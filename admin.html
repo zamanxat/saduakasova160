@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Saduakasova 160 | Онлайн Магазин</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="https://i.ibb.co.com/LzswhCyD/image.png" type="image/x-icon">
+    <style>
+        * { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes bannerFadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-slide-up { animation: slideInUp 0.5s ease-out; }
+        .animate-slide-left { animation: slideInLeft 0.5s ease-out; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out; }
+        .animate-scale-in { animation: scaleIn 0.5s ease-out; }
+        .animate-slide-right { animation: slideInRight 0.5s ease-out; }
+
+        .banner-carousel {
+            width: 100%;
+            height: 220px;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: #f3f4f6;
+        }
+
+        .banner-slide {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: bannerFadeIn 0.8s ease-in-out;
+        }
+
+        .product-card {
+            cursor: pointer;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-card-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .hit-card {
+            cursor: pointer;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .hit-card:hover {
+            transform: scale(1.05);
+        }
+
+        .hit-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .stagger-item {
+            animation: fadeIn 0.4s ease-out backwards;
+        }
+
+        .required-field::before {
+            content: '*';
+            color: red;
+            margin-right: 4px;
+        }
+
+        .error-message {
+            display: none;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            border-left: 4px solid #dc2626;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .fab-button {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .fab-button:active {
+            transform: scale(0.9);
+        }
+
+        .overlay {
+            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <div id="mainContent">
+        <header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-md z-30 p-4">
+            <div class="max-w-6xl mx-auto flex items-center justify-between">
+                <h1 class="text-2xl font-black text-gray-800">🏪 Садуакасова 160</h1>
+                <input type="text" id="searchInput" placeholder="Поиск товаров..." class="flex-1 mx-4 p-3 bg-gray-100 rounded-full outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <div class="w-10 h-10"></div>
+            </div>
+        </header>
+
+        <!-- Баннеры -->
+        <section class="mt-4 px-4">
+            <div id="bannerCarousel" class="banner-carousel">
+                <img id="bannerSlide" class="banner-slide" src="https://nesvizh.by/images/firm-news/932/banner.jpg" alt="Баннер">
+            </div>
+            <div class="flex justify-center items-center gap-3 mt-3">
+                <button onclick="prevBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300 transition-all active:scale-90">←</button>
+                <div id="bannerDots" class="flex gap-2 justify-center items-center">
+                    <button class="w-2 h-2 rounded-full bg-blue-600 w-8 transition-all"></button>
+                </div>
+                <button onclick="nextBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300 transition-all active:scale-90">→</button>
+            </div>
+        </section>
+
+        <!-- Хиты продаж -->
+        <section class="mt-8 px-4">
+            <h2 class="text-2xl font-black text-gray-800 mb-4">⭐ Хиты продаж</h2>
+            <div id="hitList" class="grid grid-cols-3 gap-3 no-scrollbar overflow-x-auto pb-4"></div>
+        </section>
+
+        <!-- Категории -->
+        <section class="mt-8 px-4">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                <button onclick="filterCat('Все')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-blue-600 text-white shadow-lg scale-105">Все</button>
+                <button onclick="filterCat('Напитки')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Напитки</button>
+                <button onclick="filterCat('Сладости')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Сладости</button>
+                <button onclick="filterCat('Канцелярия')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Канцелярия</button>
+                <button onclick="filterCat('Выпечка')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Выпечка</button>
+                <button onclick="filterCat('Печенье')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Печенье</button>
+                <button onclick="filterCat('Еда')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Еда</button>
+                <button onclick="filterCat('Гигиена')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Гигиена</button>
+                <button onclick="filterCat('Молочные')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Молочные</button>
+                <button onclick="filterCat('Закуски')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Закуски</button>
+                <button onclick="filterCat('Фаст-фуд')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Фаст-фуд</button>
+                <button onclick="filterCat('Фрукты')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Фрукты</button>
+                <button onclick="filterCat('Другое')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Другое</button>
+                <button onclick="filterCat('Услуга')" class="cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold bg-white border text-gray-500">Услуга</button>
+            </div>
+        </section>
+
+        <!-- Товары -->
+        <section class="mt-8 px-4 pb-24">
+            <h2 class="text-2xl font-black text-gray-800 mb-4">📦 Товары</h2>
+            <div id="productList" class="grid grid-cols-2 gap-4"></div>
+        </section>
+    </div>
+
+    <!-- Детали товара -->
+    <div id="detailModal" class="fixed inset-0 bg-white z-50 hidden flex-col overflow-y-auto">
+        <div class="p-4 flex items-center justify-between border-b sticky top-0 bg-white/90 backdrop-blur-md z-10">
+            <button onclick="toggleDetailModal(false)" class="text-blue-600 font-bold flex items-center gap-1 hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Назад
+            </button>
+            <span class="font-bold text-gray-400">Товар</span>
+            <div class="w-10"></div>
+        </div>
+        <div id="detailContent" class="detail-modal-content"></div>
+    </div>
+
+    <!-- Добавить товар -->
+    <div id="addModal" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-6 sticky top-0 bg-white z-10 pb-4">
+            <h2 class="text-2xl font-black">Добавить товар</h2>
+            <button onclick="toggleAddModal(false)" class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Фото -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Фотография</label>
+                <div id="imgPlaceholder" class="w-full h-48 bg-gray-100 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300">
+                    <div class="text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <p class="text-gray-500 text-sm">Выберите фото товара</p>
+                    </div>
+                </div>
+                <img id="imgPreview" class="hidden w-full h-48 object-cover rounded-xl mt-2">
+                <input type="file" id="fImage" onchange="previewImg(this)" accept="image/*" class="w-full mt-2 p-2 border rounded-lg">
+                <div id="imgError" class="error-message">Выберите фото товара</div>
+            </div>
+
+            <!-- Название товара -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Название товара</label>
+                <input type="text" id="fTitle" placeholder="Введите название товара..." class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="titleError" class="error-message">Укажите название товара</div>
+            </div>
+
+            <!-- Цена -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Цена товара (тенге)</label>
+                <input type="text" id="fPrice" placeholder="0" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="priceError" class="error-message">Укажите цену товара</div>
+            </div>
+
+            <!-- Категория -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Категория товара</label>
+                <select id="fCategory" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Выберите категорию</option>
+                    <option value="Напитки">Напитки</option>
+                    <option value="Сладости">Сладости</option>
+                    <option value="Канцелярия">Канцелярия</option>
+                    <option value="Выпечка">Выпечка</option>
+                    <option value="Печенье">Печенье</option>
+                    <option value="Еда">Еда</option>
+                    <option value="Гигиена">Гигиена</option>
+                    <option value="Молочные">Молочные продукты</option>
+                    <option value="Закуски">Закуски</option>
+                    <option value="Фаст-фуд">Фаст-фуд</option>
+                    <option value="Фрукты">Фрукты</option>
+                    <option value="Другое">Другое</option>
+                    <option value="Услуга">Услуга</option>
+                </select>
+                <div id="categoryError" class="error-message">Выберите категорию товара</div>
+            </div>
+
+            <!-- Телефон -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Номер телефона</label>
+                <input type="tel" id="fPhone" placeholder="+7 (7XX) XXX-XX-XX" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="phoneError" class="error-message">Укажите правильный номер телефона</div>
+            </div>
+
+            <!-- Номер комнаты -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Номер комнаты</label>
+                <input type="text" id="fRoom" placeholder="000" maxlength="3" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="roomError" class="error-message">Номер комнаты - 3 цифры</div>
+            </div>
+
+            <!-- Код владельца -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Код владельца</label>
+                <input type="text" id="fOwnerCode" placeholder="00000" maxlength="5" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="codeError" class="error-message">Код владельца - 5 цифр</div>
+            </div>
+
+            <!-- Пароль администратора -->
+            <div>
+                <label class="required-field block mb-2 font-bold text-sm">Пароль администратора</label>
+                <input type="password" id="fAdminCode" class="w-full p-3 bg-white rounded-xl border ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-blue-500">
+                <div id="adminError" class="error-message">Укажите пароль администратора</div>
+            </div>
+
+            <button id="submitBtn" onclick="submitProduct()" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl">
+                ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ
+            </button>
+        </div>
+    </div>
+
+    <!-- Удалить товар -->
+    <div id="deleteModal" class="fixed inset-0 overlay z-50 hidden flex items-end">
+        <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
+            <h3 class="text-xl font-black text-gray-800 mb-4">Удалить товар</h3>
+            <p class="text-gray-600 mb-6">Введите код владельца для подтверждения удаления:</p>
+            <input type="text" id="deleteCode" placeholder="Код владельца" class="w-full p-3 bg-gray-100 rounded-xl border outline-none focus:ring-2 focus:ring-red-500 mb-4">
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeDeleteModal()" class="py-4 bg-gray-200 text-gray-800 rounded-2xl font-bold hover:bg-gray-300 transition-all">Отмена</button>
+                <button onclick="confirmDelete()" class="py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка добавления товара -->
+    <button onclick="toggleAddModal(true)" class="fab-button fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition z-40 border-4 border-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
+    </button>
+
+    <!-- Экран обновления -->
+    <div id="updatingScreen" class="fixed inset-0 bg-white z-50 hidden flex flex-col items-center justify-center">
+        <div class="text-center animate-fade-in">
+            <div class="mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-blue-600 mx-auto animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </div>
+            <h1 class="text-3xl font-black text-gray-800 mb-2">Загрузка товара...</h1>
+            <p class="text-gray-500 text-lg mb-8">Пожалуйста, подождите</p>
+            <p class="text-gray-400 text-sm">Идет обновление сайта...</p>
+        </div>
+    </div>
+
+    <script>
+        const SB_URL = 'https://cgdeytbwaeuokxpjmybf.supabase.co';
+        const SB_KEY = 'sb_publishable_6gTEhAHmv2YyiGBsq6i78w_YpTbxuNS';
+        const client = supabase.createClient(SB_URL, SB_KEY);
+        const ADMIN_PASS = "55555";
+
+        // БАННЕРЫ - ИЗМЕНЯЙТЕ ЧЕРЕЗ КОД
+        const BANNERS = [
+            { url: 'https://nesvizh.by/images/firm-news/932/banner.jpg', type: 'image' },
+            { url: 'https://rostov.reklama-gravity.ru/wp-content/uploads/2023/09/1_fxVUxHlAJr2axlQHEyjjNw.jpg', type: 'image' },
+            { url: 'https://avatars.mds.yandex.net/i?id=ed409b9db462783941078ea25317901aaadec7b2-1980598-images-thumbs&n=13', type: 'image' }
+        ];
+
+        let allProducts = [];
+        let currentBannerIdx = 0;
+        let currentCat = 'Все';
+        let deleteData = null;
+        let bannerAutoPlayInterval = null;
+
+        function previewImg(input) {
+            const preview = document.getElementById('imgPreview');
+            const placeholder = document.getElementById('imgPlaceholder');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function loadData() {
+            const { data: prods, error: prodErr } = await client.from('products').select('*').order('created_at', { ascending: false });
+            if (!prodErr) allProducts = prods;
+            render();
+            updateBanner();
+            startBannerAutoPlay();
+        }
+
+        function startBannerAutoPlay() {
+            if (BANNERS.length > 1) {
+                if (bannerAutoPlayInterval) clearInterval(bannerAutoPlayInterval);
+                bannerAutoPlayInterval = setInterval(() => {
+                    nextBanner();
+                }, 10000); // 10 секунд
+            }
+        }
+
+        function stopBannerAutoPlay() {
+            if (bannerAutoPlayInterval) {
+                clearInterval(bannerAutoPlayInterval);
+                bannerAutoPlayInterval = null;
+            }
+        }
+
+        function updateBanner() {
+            if (BANNERS.length === 0) return;
+            
+            const banner = BANNERS[currentBannerIdx % BANNERS.length];
+            const slide = document.getElementById('bannerSlide');
+            
+            if (banner.type === 'image') {
+                const newImg = document.createElement('img');
+                newImg.id = 'bannerSlide';
+                newImg.className = 'banner-slide';
+                newImg.src = banner.url;
+                newImg.alt = 'Баннер';
+                newImg.style.animation = 'bannerFadeIn 0.8s ease-in-out';
+                slide.replaceWith(newImg);
+            } else if (banner.type === 'video') {
+                const newVideo = document.createElement('video');
+                newVideo.id = 'bannerSlide';
+                newVideo.className = 'banner-slide';
+                newVideo.autoplay = true;
+                newVideo.muted = true;
+                newVideo.loop = true;
+                newVideo.style.animation = 'bannerFadeIn 0.8s ease-in-out';
+                const source = document.createElement('source');
+                source.src = banner.url;
+                source.type = 'video/mp4';
+                newVideo.appendChild(source);
+                slide.replaceWith(newVideo);
+            }
+
+            updateBannerDots();
+            stopBannerAutoPlay();
+            startBannerAutoPlay();
+        }
+
+        function updateBannerDots() {
+            const dotsContainer = document.getElementById('bannerDots');
+            if (!dotsContainer || BANNERS.length === 0) return;
+            
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < BANNERS.length; i++) {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-500 ${i === currentBannerIdx % BANNERS.length ? 'bg-blue-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    currentBannerIdx = i;
+                    updateBanner();
+                };
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function nextBanner() {
+            if (BANNERS.length === 0) return;
+            currentBannerIdx = (currentBannerIdx + 1) % BANNERS.length;
+            updateBanner();
+        }
+
+        function prevBanner() {
+            if (BANNERS.length === 0) return;
+            currentBannerIdx = (currentBannerIdx - 1 + BANNERS.length) % BANNERS.length;
+            updateBanner();
+        }
+
+        document.getElementById('fPrice').addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/[^\d]/g, '');
+        });
+
+        document.getElementById('fPhone').addEventListener('input', e => {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            e.target.value = !x[2] ? x[1] : `+7 (${x[2]}) ${x[3]}${x[4] ? '-' + x[4] : ''}${x[5] ? '-' + x[5] : ''}`;
+        });
+        document.getElementById('fRoom').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3));
+        document.getElementById('fOwnerCode').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5));
+        document.getElementById('searchInput').addEventListener('input', render);
+
+        function hideAllErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+        }
+
+        function showError(fieldId) {
+            const el = document.getElementById(fieldId);
+            if (el) el.classList.add('show');
+        }
+
+        function validateForm() {
+            hideAllErrors();
+            let valid = true;
+
+            if (!document.getElementById('fImage').files[0]) {
+                showError('imgError');
+                valid = false;
+            }
+            if (!document.getElementById('fTitle').value.trim()) {
+                showError('titleError');
+                valid = false;
+            }
+            if (!document.getElementById('fPrice').value) {
+                showError('priceError');
+                valid = false;
+            }
+            if (!document.getElementById('fCategory').value) {
+                showError('categoryError');
+                valid = false;
+            }
+            if (!document.getElementById('fPhone').value || document.getElementById('fPhone').value.replace(/\D/g, '').length < 11) {
+                showError('phoneError');
+                valid = false;
+            }
+            if (document.getElementById('fRoom').value.length !== 3) {
+                showError('roomError');
+                valid = false;
+            }
+            if (document.getElementById('fOwnerCode').value.length !== 5) {
+                showError('codeError');
+                valid = false;
+            }
+            if (!document.getElementById('fAdminCode').value) {
+                showError('adminError');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        function toggleAddModal(s) {
+            document.getElementById('addModal').classList.toggle('hidden', !s);
+            if(!s) resetForm();
+        }
+        function toggleDetailModal(s) { document.getElementById('detailModal').classList.toggle('hidden', !s); }
+
+        function resetForm() {
+            document.getElementById('fTitle').value = "";
+            document.getElementById('fPrice').value = "";
+            document.getElementById('fCategory').value = "";
+            document.getElementById('fPhone').value = "";
+            document.getElementById('fRoom').value = "";
+            document.getElementById('fOwnerCode').value = "";
+            document.getElementById('fAdminCode').value = "";
+            document.getElementById('fImage').value = "";
+            document.getElementById('imgPreview').src = "";
+            document.getElementById('imgPreview').classList.add('hidden');
+            document.getElementById('imgPlaceholder').classList.remove('hidden');
+            hideAllErrors();
+
+            const btn = document.getElementById('submitBtn');
+            btn.className = "w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl";
+            btn.innerText = "ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ";
+            btn.disabled = false;
+        }
+
+        function filterCat(cat) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                const active = b.innerText === cat;
+                b.className = `cat-btn px-5 py-2 rounded-full whitespace-nowrap text-sm font-bold transition-all ${active ? 'bg-blue-600 text-white shadow-lg scale-105' : 'bg-white border text-gray-500 hover:border-blue-300'}`;
+            });
+            render();
+        }
+
+        async function submitProduct() {
+            if (!validateForm()) return;
+
+            const adminInput = document.getElementById('fAdminCode').value;
+            const imgFile = document.getElementById('fImage').files[0];
+
+            if (adminInput !== ADMIN_PASS) return showErrorModal("Неверный пароль администратора!");
+
+            showUpdatingScreen();
+
+            try {
+                const fileName = `${Date.now()}_${imgFile.name}`;
+                const { error: imgErr } = await client.storage.from('product photo').upload(fileName, imgFile);
+                if (imgErr) throw imgErr;
+
+                const { data: publicUrl } = client.storage.from('product photo').getPublicUrl(fileName);
+
+                const { error: dbErr } = await client.from('products').insert([{
+                    title: document.getElementById('fTitle').value,
+                    price: parseInt(document.getElementById('fPrice').value),
+                    category: document.getElementById('fCategory').value,
+                    phone: document.getElementById('fPhone').value,
+                    room_number: document.getElementById('fRoom').value,
+                    owner_code: document.getElementById('fOwnerCode').value,
+                    image_url: publicUrl.publicUrl,
+                    is_hit: false
+                }]);
+                if (dbErr) throw dbErr;
+
+                setTimeout(() => {
+                    hideUpdatingScreen();
+                    toggleAddModal(false);
+                    loadData();
+                }, 2000);
+
+            } catch (err) {
+                hideUpdatingScreen();
+                showErrorModal("Ошибка: " + err.message);
+            }
+        }
+
+        function showErrorModal(msg) {
+            const modal = document.createElement('div');
+            modal.className = "fixed inset-0 overlay z-50 flex items-end";
+            modal.innerHTML = `
+                <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
+                    <p class="text-center font-bold text-gray-800 mb-4">${msg}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all">Понято</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function openDetail(p) {
+            const isHit = p.is_hit === true;
+
+            document.getElementById('detailContent').innerHTML = `
+                <div class="relative overflow-hidden">
+                    <img src="${p.image_url}" class="w-full h-[500px] object-cover shadow-lg animate-fade-in">
+                </div>
+                <div class="p-6 animate-slide-up">
+                    <h1 class="text-2xl font-black text-gray-800 leading-tight mb-3">${p.title}</h1>
+                    <span class="text-3xl font-black text-blue-600">${p.price} ₸</span>
+
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-transparent rounded-xl border border-blue-100">
+                            <span class="text-sm text-gray-500 font-medium">Номер комнаты</span>
+                            <span class="font-bold text-gray-800 bg-white px-3 py-1 rounded-lg shadow-sm text-base">${p.room_number}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-transparent rounded-xl border border-purple-100">
+                            <span class="text-sm text-gray-500 font-medium">Код владельца</span>
+                            <span class="font-bold text-gray-800 bg-white px-3 py-1 rounded-lg shadow-sm text-base font-mono">${p.owner_code}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-transparent rounded-xl border border-green-100">
+                            <span class="text-sm text-gray-500 font-medium">Статус</span>
+                            <span class="font-bold ${isHit ? 'text-green-600 bg-green-100' : 'text-gray-500 bg-gray-100'} px-3 py-1 rounded-lg text-sm">
+                                ${isHit ? '⭐ Хит продаж' : 'Обычный товар'}
+                            </span>
+                        </div>
+                    </div>
+
+                    <a href="tel:${p.phone}" class="mt-6 w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-[2rem] flex items-center justify-center gap-2 font-black text-lg shadow-xl shadow-blue-300 active:scale-95 hover:shadow-2xl transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                        Позвонить продавцу
+                    </a>
+
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <button onclick="openAdminDetail('${p.id}')" class="py-3 rounded-xl font-bold bg-purple-600 text-white hover:bg-purple-700 transition-all active:scale-95">
+                            ⚙️ Редактировать
+                        </button>
+                        <button onclick="openDeleteModal('${p.id}', '${p.owner_code}')" class="py-3 rounded-xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all active:scale-95">
+                            🗑️ Удалить
+                        </button>
+                    </div>
+                </div>
+            `;
+            toggleDetailModal(true);
+        }
+
+        function openAdminDetail(productId) {
+            const product = allProducts.find(p => p.id == productId);
+            if (!product) return;
+
+            const isHit = product.is_hit === true;
+
+            const adminModal = document.createElement('div');
+            adminModal.id = 'adminDetailModal';
+            adminModal.className = 'fixed inset-0 bg-white z-50 flex flex-col overflow-y-auto';
+            adminModal.innerHTML = `
+                <div class="p-4 flex items-center justify-between border-b sticky top-0 bg-gradient-to-r from-purple-600 to-purple-700 text-white z-10">
+                    <button onclick="document.getElementById('adminDetailModal').remove()" class="font-bold flex items-center gap-1 hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg> Назад
+                    </button>
+                    <span class="font-bold">Редактирование товара</span>
+                    <div class="w-10"></div>
+                </div>
+
+                <div class="p-6 space-y-6 pb-20">
+                    <!-- Информация о товаре -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200">
+                        <h3 class="text-xl font-black text-blue-800 mb-4">📋 Информация о товаре</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold">Идентификатор товара</p>
+                                <p class="text-lg font-bold text-gray-800">${product.id}</p>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold mb-2">Название товара</p>
+                                <input type="text" value="${product.title}" onchange="updateProduct(${product.id}, 'title', this.value)" class="w-full p-2 border rounded font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold mb-2">Цена товара</p>
+                                <input type="number" value="${product.price}" onchange="updateProduct(${product.id}, 'price', this.value)" class="w-full p-2 border rounded font-bold text-lg outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold mb-2">Категория товара</p>
+                                <select onchange="updateProduct(${product.id}, 'category', this.value)" class="w-full p-2 border rounded font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Напитки" ${product.category === 'Напитки' ? 'selected' : ''}>Напитки</option>
+                                    <option value="Сладости" ${product.category === 'Сладости' ? 'selected' : ''}>Сладости</option>
+                                    <option value="Канцелярия" ${product.category === 'Канцелярия' ? 'selected' : ''}>Канцелярия</option>
+                                    <option value="Выпечка" ${product.category === 'Выпечка' ? 'selected' : ''}>Выпечка</option>
+                                    <option value="Печенье" ${product.category === 'Печенье' ? 'selected' : ''}>Печенье</option>
+                                    <option value="Еда" ${product.category === 'Еда' ? 'selected' : ''}>Еда</option>
+                                    <option value="Гигиена" ${product.category === 'Гигиена' ? 'selected' : ''}>Гигиена</option>
+                                    <option value="Молочные" ${product.category === 'Молочные' ? 'selected' : ''}>Молочные продукты</option>
+                                    <option value="Закуски" ${product.category === 'Закуски' ? 'selected' : ''}>Закуски</option>
+                                    <option value="Фаст-фуд" ${product.category === 'Фаст-фуд' ? 'selected' : ''}>Фаст-фуд</option>
+                                    <option value="Фрукты" ${product.category === 'Фрукты' ? 'selected' : ''}>Фрукты</option>
+                                    <option value="Другое" ${product.category === 'Другое' ? 'selected' : ''}>Другое</option>
+                                    <option value="Услуга" ${product.category === 'Услуга' ? 'selected' : ''}>Услуга</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold mb-2">Номер телефона</p>
+                                <input type="tel" value="${product.phone}" onchange="updateProduct(${product.id}, 'phone', this.value)" class="w-full p-2 border rounded font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold mb-2">Номер комнаты</p>
+                                <input type="text" value="${product.room_number}" onchange="updateProduct(${product.id}, 'room_number', this.value)" class="w-full p-2 border rounded font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div class="bg-white p-3 rounded-lg">
+                                <p class="text-xs text-gray-500 font-bold">Код владельца</p>
+                                <p class="text-lg font-bold text-gray-800 bg-gray-100 p-2 rounded font-mono">${product.owner_code}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Хиты продаж -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border-2 border-purple-200">
+                        <h3 class="text-xl font-black text-purple-800 mb-4">⭐ Хиты продаж</h3>
+                        
+                        <div class="space-y-3">
+                            <button onclick="toggleProductHit(${product.id})" class="w-full py-4 rounded-xl font-black text-lg transition-all active:scale-95 ${isHit ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'}">
+                                ${isHit ? '❌ Убрать из хитов' : '⭐ Добавить в хиты'}
+                            </button>
+                            <p class="text-xs text-center text-gray-600">Текущий статус: <span class="font-bold ${isHit ? 'text-green-600' : 'text-gray-500'}">${isHit ? 'В хитах продаж' : 'Не в хитах'}</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Удаление товара -->
+                    <button onclick="deleteProductAdmin(${product.id})" class="w-full bg-red-600 text-white py-4 rounded-xl font-black text-lg hover:bg-red-700 transition-all active:scale-95">
+                        🗑️ Удалить товар
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(adminModal);
+        }
+
+        async function updateProduct(productId, field, value) {
+            const update = {};
+            update[field] = isNaN(value) ? value : parseInt(value);
+
+            const { error } = await client.from('products').update(update).eq('id', productId);
+            if (!error) {
+                loadData();
+                showErrorModal('✅ Товар успешно обновлен!');
+            } else {
+                showErrorModal('❌ Ошибка: ' + error.message);
+            }
+        }
+
+        async function toggleProductHit(productId) {
+            const product = allProducts.find(p => p.id == productId);
+            if (!product) return;
+
+            const { error } = await client.from('products').update({ is_hit: !product.is_hit }).eq('id', productId);
+            if (!error) {
+                loadData();
+                document.getElementById('adminDetailModal').remove();
+                openAdminDetail(productId);
+                showErrorModal(product.is_hit ? '❌ Убрано из хитов!' : '⭐ Добавлено в хиты!');
+            }
+        }
+
+        async function deleteProductAdmin(productId) {
+            if (!confirm('Вы уверены, что хотите удалить этот товар?')) return;
+            
+            const { error } = await client.from('products').delete().eq('id', productId);
+            if (!error) {
+                showErrorModal('✅ Товар успешно удален!');
+                document.getElementById('adminDetailModal').remove();
+                toggleDetailModal(false);
+                loadData();
+            } else {
+                showErrorModal('❌ Ошибка: ' + error.message);
+            }
+        }
+
+        function openDeleteModal(id, code) {
+            deleteData = { id, code };
+            document.getElementById('deleteCode').value = "";
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            deleteData = null;
+        }
+
+        async function confirmDelete() {
+            if (!deleteData) return;
+            const input = document.getElementById('deleteCode').value;
+            if (input === deleteData.code) {
+                await client.from('products').delete().eq('id', deleteData.id);
+                closeDeleteModal();
+                toggleDetailModal(false);
+                loadData();
+                showErrorModal('✅ Товар успешно удален!');
+            } else if(input) {
+                showErrorModal("❌ Неверный код владельца!");
+            }
+        }
+
+        function render() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const hitBox = document.getElementById('hitList');
+            const proBox = document.getElementById('productList');
+            hitBox.innerHTML = ""; 
+            proBox.innerHTML = "";
+
+            // ХИТЫ ПРОДАЖ
+            let hitProducts = allProducts.filter(p => p.is_hit === true);
+            
+            if (hitProducts.length === 0) {
+                hitProducts = allProducts.slice(0, 10);
+            } else {
+                hitProducts = hitProducts.slice(0, 10);
+            }
+
+            hitProducts.forEach((p, index) => {
+                const d = document.createElement('div');
+                d.className = "hit-card p-3 cursor-pointer stagger-item";
+                d.style.animationDelay = `${0.08 * index}s`;
+                d.onclick = () => openDetail(p);
+                d.innerHTML = `
+                    <img src="${p.image_url}">
+                    <div class="px-1">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-tighter truncate">${p.category}</p>
+                        <p class="text-xs font-bold text-gray-800 truncate leading-tight mb-1">${p.title}</p>
+                        <p class="text-blue-600 text-sm font-black">${p.price} ₸</p>
+                    </div>
+                `;
+                hitBox.appendChild(d);
+            });
+
+            const filteredProducts = allProducts.filter(p => (currentCat === 'Все' || p.category === currentCat) && p.title.toLowerCase().includes(search));
+            
+            if (filteredProducts.length === 0) {
+                proBox.innerHTML = `
+                    <div class="col-span-2 flex flex-col items-center justify-center py-16 animate-fade-in">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                        </svg>
+                        <p class="text-gray-400 text-lg font-bold text-center">Товары в категории <span class="text-blue-600">"${currentCat}"</span> не найдены</p>
+                        <p class="text-gray-300 text-sm mt-2">Выберите другую категорию или попробуйте позже</p>
+                    </div>
+                `;
+            } else {
+                filteredProducts.forEach((p, index) => {
+                    const d = document.createElement('div');
+                    d.className = "product-card cursor-pointer stagger-item";
+                    d.style.animationDelay = `${0.1 * index}s`;
+                    d.onclick = () => openDetail(p);
+                    d.innerHTML = `
+                        <img src="${p.image_url}">
+                        <div class="product-card-content">
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">${p.title}</p>
+                                <p class="text-lg font-black text-blue-600 mt-2">${p.price} ₸</p>
+                            </div>
+                            <div class="category-badge" style="margin: 8px -16px -16px -16px;">${p.category}</div>
+                        </div>
+                    `;
+                    proBox.appendChild(d);
+                });
+            }
+        }
+
+        function showUpdatingScreen() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('updatingScreen').classList.remove('hidden');
+        }
+
+        function hideUpdatingScreen() {
+            document.getElementById('updatingScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
