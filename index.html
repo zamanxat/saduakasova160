@@ -1203,12 +1203,29 @@
 
                 document.getElementById('editForm').innerHTML = `
                     <div>
-                        <label class="block mb-2 font-bold text-sm">Название</label>
+                        <label class="block mb-2 font-bold text-sm">Фото (URL ссылки)</label>
+                        <div id="editImageUrlContainer" class="url-input-container">
+                            ${images.map((img, idx) => `
+                                <div class="url-item">
+                                    <input type="url" value="${img}" placeholder="https://example.com/image.jpg" class="edit-image-url-input w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                                    ${idx === 0 ? 
+                                        `<button type="button" onclick="addEditImageUrl()" class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-lg">+</button>` : 
+                                        `<button type="button" onclick="this.parentElement.remove(); updateEditImagePreviews();" class="bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg">×</button>`
+                                    }
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="editImagePreviewContainer" class="flex flex-wrap gap-2 mt-3">
+                            ${images.map(img => `<img src="${img}" class="w-16 h-16 object-cover rounded-xl border-2 border-gray-200">`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Название товара</label>
                         <input type="text" id="editTitle" value="${product.title}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
                     </div>
                     <div>
                         <label class="block mb-2 font-bold text-sm">Цена (₸)</label>
-                        <input type="number" id="editPrice" value="${product.price}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                        <input type="tel" inputmode="numeric" id="editPrice" value="${product.price}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
                     </div>
                     <div>
                         <label class="block mb-2 font-bold text-sm">Категория</label>
@@ -1217,57 +1234,164 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block mb-2 font-bold text-sm">Описание</label>
-                        <textarea id="editDescription" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${product.description || ''}</textarea>
+                        <label class="block mb-2 font-bold text-sm">Описание товара</label>
+                        <textarea id="editDescription" rows="3" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${product.description || ''}</textarea>
                     </div>
                     <div>
                         <label class="block mb-2 font-bold text-sm">Состав</label>
                         <textarea id="editComposition" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${product.composition || ''}</textarea>
                     </div>
                     <div>
-                        <label class="block mb-2 font-bold text-sm">Фото (URL, через запятую)</label>
-                        <textarea id="editImages" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${images.join(', ')}</textarea>
+                        <label class="block mb-2 font-bold text-sm">Номер телефона</label>
+                        <input type="tel" id="editPhone" value="${product.phone}" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
                     </div>
                     <div>
-                        <label class="block mb-2 font-bold text-sm">Телефон</label>
-                        <input type="tel" id="editPhone" value="${product.phone}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                        <label class="block mb-2 font-bold text-sm">WhatsApp номер</label>
+                        <input type="tel" id="editWhatsapp" value="${product.whatsapp || ''}" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
                     </div>
                     <div>
-                        <label class="block mb-2 font-bold text-sm">WhatsApp</label>
-                        <input type="tel" id="editWhatsapp" value="${product.whatsapp || ''}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                        <label class="block mb-2 font-bold text-sm">Номер комнаты (3 цифры)</label>
+                        <input type="tel" inputmode="numeric" maxlength="3" id="editRoom" value="${product.room_number}" placeholder="Номер комнаты" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Новый код владельца (5 цифр)</label>
+                        <input type="tel" inputmode="numeric" maxlength="5" id="editOwnerCode" value="${product.owner_code}" placeholder="Код владельца" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none text-center font-bold">
+                        <p class="text-xs text-gray-400 mt-1">⚠️ Запомните новый код!</p>
                     </div>
                     <button onclick="deleteProduct()" class="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all mt-2">
-                        Удалить объявление
+                        🗑️ Удалить объявление
                     </button>
                 `;
                 document.getElementById('editForm').classList.remove('hidden');
                 document.getElementById('editActionBtn').innerText = "Сохранить";
                 document.getElementById('editActionBtn').onclick = saveEdit;
+
+                // Event listeners қосу
+                setupEditFormListeners();
             } else if (input) {
                 showErrorModal("Неверный код!");
             }
         }
 
+        // Edit form үшін event listeners
+        function setupEditFormListeners() {
+            // Баға - тек сандар
+            document.getElementById('editPrice').addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/[^\d]/g, '');
+            });
+
+            // Телефон форматтау
+            document.getElementById('editPhone').addEventListener('input', e => formatPhone(e.target));
+            document.getElementById('editWhatsapp').addEventListener('input', e => formatPhone(e.target));
+
+            // Комната номері - тек 3 сан
+            document.getElementById('editRoom').addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3);
+            });
+
+            // Владелец коды - тек 5 сан
+            document.getElementById('editOwnerCode').addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5);
+            });
+
+            // Image URL listeners
+            document.querySelectorAll('.edit-image-url-input').forEach(input => {
+                input.addEventListener('input', updateEditImagePreviews);
+            });
+        }
+
+        // Edit формасына жаңа сурет URL қосу
+        function addEditImageUrl() {
+            const container = document.getElementById('editImageUrlContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'url-item';
+            newItem.innerHTML = `
+                <input type="url" placeholder="https://example.com/image.jpg" class="edit-image-url-input w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                <button type="button" onclick="this.parentElement.remove(); updateEditImagePreviews();" class="bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg">×</button>
+            `;
+            container.appendChild(newItem);
+            newItem.querySelector('input').addEventListener('input', updateEditImagePreviews);
+        }
+
+        // Edit суреттерін preview жаңарту
+        function updateEditImagePreviews() {
+            const container = document.getElementById('editImagePreviewContainer');
+            const inputs = document.querySelectorAll('.edit-image-url-input');
+            container.innerHTML = '';
+            inputs.forEach(input => {
+                if (input.value.trim()) {
+                    const img = document.createElement('img');
+                    img.src = input.value.trim();
+                    img.className = 'w-16 h-16 object-cover rounded-xl border-2 border-gray-200';
+                    img.onerror = () => img.remove();
+                    container.appendChild(img);
+                }
+            });
+        }
+
+        // Edit суреттерін алу
+        function getEditImageUrls() {
+            const inputs = document.querySelectorAll('.edit-image-url-input');
+            return Array.from(inputs).map(i => i.value.trim()).filter(url => url);
+        }
+
         async function saveEdit() {
             if (!editData) return;
 
-            const imagesText = document.getElementById('editImages').value;
-            const images = imagesText.split(',').map(s => s.trim()).filter(s => s);
+            // Валидация
+            const title = document.getElementById('editTitle').value.trim();
+            const price = document.getElementById('editPrice').value;
+            const phone = document.getElementById('editPhone').value;
+            const whatsapp = document.getElementById('editWhatsapp').value;
+            const room = document.getElementById('editRoom').value;
+            const ownerCode = document.getElementById('editOwnerCode').value;
+            const images = getEditImageUrls();
+
+            if (!title) {
+                showErrorModal("Укажите название товара");
+                return;
+            }
+            if (!price) {
+                showErrorModal("Укажите цену товара");
+                return;
+            }
+            if (images.length === 0) {
+                showErrorModal("Добавьте хотя бы одно фото");
+                return;
+            }
+            if (phone.replace(/\D/g, '').length < 11) {
+                showErrorModal("Неверный номер телефона");
+                return;
+            }
+            if (whatsapp.replace(/\D/g, '').length < 11) {
+                showErrorModal("Неверный WhatsApp номер");
+                return;
+            }
+            if (room.length !== 3) {
+                showErrorModal("Номер комнаты - 3 цифры");
+                return;
+            }
+            if (ownerCode.length !== 5) {
+                showErrorModal("Код владельца - 5 цифр");
+                return;
+            }
 
             const { error } = await client.from('products').update({
-                title: document.getElementById('editTitle').value,
-                price: parseInt(document.getElementById('editPrice').value),
+                title: title,
+                price: parseInt(price),
                 category: document.getElementById('editCategory').value,
                 description: document.getElementById('editDescription').value || null,
                 composition: document.getElementById('editComposition').value || null,
-                phone: document.getElementById('editPhone').value,
-                whatsapp: document.getElementById('editWhatsapp').value,
+                phone: phone,
+                whatsapp: whatsapp,
+                room_number: room,
+                owner_code: ownerCode,
                 image_url: images[0] || '',
                 images: images
             }).eq('id', editData.id);
 
             if (!error) {
-                showErrorModal("✓ Сохранено!");
+                showErrorModal("✓ Изменения сохранены!");
                 closeEditModal();
                 toggleDetailModal(false);
                 loadData();
