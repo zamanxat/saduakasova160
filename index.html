@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Saduakasova 160 | Online Shoping</title>
+    <title>Saduakasova 160 | Online Shopping</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon" href="https://i.ibb.co.com/LzswhCyD/image.png" type="image/x-icon">
@@ -13,77 +13,74 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
         @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
-
         @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* Жаңа лайк анимациялары */
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.35); }
+            30% { transform: scale(0.9); }
+            45% { transform: scale(1.2); }
+            60% { transform: scale(0.95); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes heartBurst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+        }
+        
+        @keyframes ripple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        @keyframes colorPulse {
+            0%, 100% { background: #ef4444; }
+            50% { background: #f87171; }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
         }
 
-        .animate-slide-up {
-            animation: slideInUp 0.5s ease-out;
-        }
-
-        .animate-slide-left {
-            animation: slideInLeft 0.4s ease-out;
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .animate-scale-in {
-            animation: scaleIn 0.3s ease-out;
-        }
-
-        .animate-slide-right {
-            animation: slideInRight 0.4s ease-out;
-        }
+        .animate-slide-up { animation: slideInUp 0.5s ease-out; }
+        .animate-slide-left { animation: slideInLeft 0.4s ease-out; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        .animate-scale-in { animation: scaleIn 0.3s ease-out; }
+        .animate-slide-right { animation: slideInRight 0.4s ease-out; }
+        
+        .animate-heart-pop { animation: heartPop 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
+        .animate-heart-burst { animation: heartBurst 0.5s ease-out forwards; }
+        .animate-float-up { animation: floatUp 0.8s ease-out forwards; }
+        .animate-ripple { animation: ripple 0.6s ease-out forwards; }
+        .animate-sparkle { animation: sparkle 0.6s ease-out; }
 
         .product-card {
             border-radius: 24px;
@@ -95,17 +92,12 @@
             min-height: 320px;
             display: flex;
             flex-direction: column;
+            background: white;
+            position: relative;
         }
         
-        .product-card:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        }
+        .product-card:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); }
         
         .product-card img {
             width: 100%;
@@ -113,10 +105,7 @@
             object-fit: cover;
             transition: transform 0.4s ease-out;
         }
-
-        .product-card:hover img {
-            transform: scale(1.05);
-        }
+        .product-card:hover img { transform: scale(1.05); }
         
         .product-card-content {
             padding: 16px;
@@ -126,12 +115,115 @@
             justify-content: space-between;
             min-height: 140px;
         }
-
         .product-card-content p {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .line-clamp-2 { 
+            display: -webkit-box; 
+            -webkit-line-clamp: 2; 
+            line-clamp: 2;  /* Стандартты қасиет қосылды */
+            -webkit-box-orient: vertical; 
+            overflow: hidden; 
+        }
+
+        /* Жақсартылған лайк кнопкасы */
+        .like-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            border: 2px solid transparent;
+            overflow: visible;
+        }
+        .like-btn:hover { 
+            transform: scale(1.15); 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .like-btn:active { transform: scale(0.9); }
+        .like-btn.liked { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+        }
+        .like-btn.liked svg { 
+            fill: white; 
+            stroke: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .like-btn svg {
+            transition: all 0.3s ease;
+        }
+        .like-btn:not(.liked):hover svg {
+            stroke: #ef4444;
+            transform: scale(1.1);
+        }
+        
+        /* Лайк эффектілері */
+        .like-burst {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(239,68,68,0.4) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .like-ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #ef4444;
+            pointer-events: none;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            font-size: 20px;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fbbf24;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .like-count {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255,255,255,0.95);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .like-count.liked-count {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: #dc2626;
         }
         
         .hit-card {
@@ -142,18 +234,10 @@
             min-width: 150px;
             overflow: hidden;
             background: white;
+            position: relative;
         }
-        
-        .hit-card:active {
-            transform: scale(0.94);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .hit-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
+        .hit-card:active { transform: scale(0.94); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); }
+        .hit-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
         .hit-card img {
             width: 100%;
             height: 140px;
@@ -162,15 +246,9 @@
             margin-bottom: 10px;
             transition: transform 0.4s ease-out;
         }
-
-        .hit-card:hover img {
-            transform: scale(1.08);
-        }
+        .hit-card:hover img { transform: scale(1.08); }
         
-        .overlay {
-            background: rgba(0, 0, 0, 0.4);
-            animation: fadeIn 0.3s ease-out;
-        }
+        .overlay { background: rgba(0, 0, 0, 0.4); animation: fadeIn 0.3s ease-out; }
         
         .category-badge {
             display: block;
@@ -199,28 +277,15 @@
             display: flex;
             flex-direction: column;
         }
-
-        .related-card:active {
-            transform: scale(0.95);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .related-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        }
-
+        .related-card:active { transform: scale(0.95); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); }
+        .related-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
         .related-card img {
             width: 100%;
             height: 160px;
             object-fit: cover;
             transition: transform 0.4s ease-out;
         }
-
-        .related-card:hover img {
-            transform: scale(1.06);
-        }
-
+        .related-card:hover img { transform: scale(1.06); }
         .related-card-content {
             padding: 12px;
             flex: 1;
@@ -228,7 +293,6 @@
             flex-direction: column;
             justify-content: space-between;
         }
-
         .related-category-badge {
             display: block;
             background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
@@ -244,27 +308,13 @@
             margin-top: auto;
         }
 
-        .detail-modal-content {
-            animation: slideInUp 0.4s ease-out;
-        }
-
-        .fab-button {
-            animation: slideInUp 0.5s ease-out 0.3s both;
-        }
-
-        header {
-            animation: slideInDown 0.4s ease-out;
-        }
+        .detail-modal-content { animation: slideInUp 0.4s ease-out; }
+        .fab-button { animation: slideInUp 0.5s ease-out 0.3s both; }
+        header { animation: slideInDown 0.4s ease-out; }
 
         @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .stagger-item {
@@ -278,14 +328,12 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             background: #000;
         }
-
         .banner-slide {
             width: 100%;
             height: 220px;
             object-fit: cover;
             animation: bannerFadeIn 0.8s ease-in-out;
         }
-
         .banner-slide video {
             width: 100%;
             height: 100%;
@@ -294,25 +342,8 @@
         }
 
         @keyframes bannerFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes bannerSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .error-message {
@@ -321,10 +352,7 @@
             margin-top: 4px;
             display: none;
         }
-
-        .error-message.show {
-            display: block;
-        }
+        .error-message.show { display: block; }
 
         .required-field::after {
             content: " *";
@@ -332,16 +360,93 @@
             font-weight: bold;
         }
 
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .image-gallery {
+            display: flex;
             gap: 8px;
+            overflow-x: auto;
+            padding: 8px 0;
+        }
+        .image-gallery img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .image-gallery img.active {
+            border-color: #3b82f6;
+        }
+        .image-gallery img:hover {
+            transform: scale(1.05);
         }
 
-        .category-grid button {
-            padding: 12px;
-            text-align: left;
-            font-size: 13px;
+        .url-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .url-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .url-item input {
+            flex: 1;
+        }
+        .url-item button {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .sort-select {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+        }
+        .sort-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Detail page like button */
+        .detail-like-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            border: 2px solid transparent;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+        .detail-like-btn:hover { 
+            transform: scale(1.15); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .detail-like-btn:active { transform: scale(0.9); }
+        .detail-like-btn.liked { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 4px 25px rgba(239, 68, 68, 0.5);
+        }
+        .detail-like-btn.liked svg { 
+            fill: white; 
+            stroke: white;
         }
     </style>
 </head>
@@ -363,18 +468,22 @@
                 <button onclick="filterCat('Закуски')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Закуски</button>
                 <button onclick="filterCat('Фаст-фуд')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Фаст-фуд</button>
                 <button onclick="filterCat('Фрукты')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Фрукты</button>
+                <button onclick="filterCat('Косметика')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Косметика</button>
+                <button onclick="filterCat('Аренда')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Аренда</button>
                 <button onclick="filterCat('Другое')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Другое</button>
                 <button onclick="filterCat('Услуга')" class="cat-btn px-5 py-2 bg-white border rounded-full whitespace-nowrap text-sm font-medium transition-all">Услуга</button>
             </div>
         </header>
 
-        <main class="pb-24">
+        <main style="padding-bottom: 140px;">
+
             <section class="mt-4 px-4">
                 <div id="bannerCarousel" class="banner-carousel">
-                    <img id="bannerSlide" class="banner-slide" src="https://avatars.mds.yandex.net/i?id=ed409b9db462783941078ea25317901aaadec7b2-1980598-images-thumbs&n=13" alt="Banner">
+                    <img id="bannerSlide" class="banner-slide" src="" alt="Banner">
                 </div>
                 <div class="flex justify-center gap-2 mt-3">
                     <button onclick="prevBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300">←</button>
+                    <div id="bannerDots" class="flex gap-2 items-center"></div>
                     <button onclick="nextBanner()" class="px-4 py-2 bg-gray-200 rounded-full text-sm font-bold hover:bg-gray-300">→</button>
                 </div>
             </section>
@@ -385,35 +494,43 @@
             </section>
 
             <section class="mt-8 px-4 mb-8">
-                <h2 class="font-black text-xl mb-5 animate-slide-left">Каталог товаров</h2>
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="font-black text-xl animate-slide-left">Каталог товаров</h2>
+                    <select id="sortSelect" onchange="render()" class="sort-select">
+                        <option value="newest">Сначала новые</option>
+                        <option value="price_asc">Сначала дешевые</option>
+                        <option value="price_desc">Сначала дорогие</option>
+                        <option value="popular">По популярности</option>
+                    </select>
+                </div>
                 <div id="productList" class="grid grid-cols-2 gap-4"></div>
             </section>
+
+            <!-- Footer -->
+            <footer class="mt-12 mb-24 px-4 text-center">
+                <div class="bg-white rounded-3xl p-6 shadow-sm">
+                    <img src="https://i.ibb.co.com/LzswhCyD/image.png" class="w-16 h-16 mx-auto mb-3 rounded-2xl">
+                    <h3 class="font-black text-gray-800">Saduakasova 160</h3>
+                    <p class="text-gray-500 text-sm mt-1">Общежитие маркетплейс</p>
+                    <div class="flex justify-center gap-3 mt-4">
+                        <a href="admin.html" class="px-4 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-600 hover:bg-gray-200 transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Админ
+                        </a>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-4">© 2026 Барлық құқықтар қорғалған</p>
+                </div>
+            </footer>
         </main>
 
         <button onclick="toggleAddModal(true)" class="fab-button fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition z-40 border-4 border-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" /></svg>
         </button>
 
-        <div id="adminPanel" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
-            <div class="flex justify-between items-center mb-6 animate-slide-right">
-                <h2 class="text-2xl font-black">Админ Панель</h2>
-                <button onclick="toggleAdminPanel(false)" class="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-
-            <div class="space-y-6">
-                <!-- Админ пароль бөлімі -->
-                <div class="border-t pt-6">
-                    <h3 class="text-lg font-black mb-4">Админ пароль</h3>
-                    <input type="text" id="newAdminPass" placeholder="Жаңа пароль" class="w-full p-3 bg-gray-50 rounded-xl border ring-1 ring-gray-200 outline-none mb-3">
-                    <button onclick="updateAdminPass()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all">
-                        Пароль өзгерту
-                    </button>
-                </div>
-            </div>
-        </div>
-
+        <!-- Добавить товар Modal -->
         <div id="addModal" class="fixed inset-0 bg-white z-50 hidden p-6 overflow-y-auto">
             <div class="flex justify-between items-center mb-6 animate-slide-right">
                 <h2 class="text-2xl font-black">Новый товар</h2>
@@ -423,17 +540,17 @@
             </div>
 
             <div class="space-y-4">
+                <!-- Фото URL -->
                 <div>
-                    <label class="required-field block mb-2 font-bold text-sm">Фото товара</label>
-                    <label class="flex flex-col items-center justify-center w-full h-56 border-2 border-dashed border-blue-200 rounded-[2.5rem] cursor-pointer bg-blue-50/30 hover:bg-blue-50 transition relative overflow-hidden group animate-scale-in">
-                        <div id="imgPlaceholder" class="flex flex-col items-center text-blue-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            <span class="font-bold">Нажмите, чтобы добавить фото</span>
+                    <label class="required-field block mb-2 font-bold text-sm">Фото товара (URL ссылки)</label>
+                    <div id="imageUrlContainer" class="url-input-container">
+                        <div class="url-item">
+                            <input type="url" placeholder="https://example.com/image.jpg" class="image-url-input w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <button type="button" onclick="addImageUrl()" class="bg-blue-600 text-white hover:bg-blue-700">+</button>
                         </div>
-                        <input type="file" id="fImage" accept="image/*" class="hidden" onchange="previewImg(this)">
-                        <img id="imgPreview" class="absolute inset-0 w-full h-full object-cover hidden">
-                    </label>
-                    <div class="error-message" id="imgError">Выберите фото товара</div>
+                    </div>
+                    <div id="imagePreviewContainer" class="flex flex-wrap gap-2 mt-3"></div>
+                    <div class="error-message" id="imgError">Добавьте хотя бы одну ссылку на фото</div>
                 </div>
 
                 <div>
@@ -450,31 +567,47 @@
 
                 <div>
                     <label class="required-field block mb-2 font-bold text-sm">Категория</label>
-                    <div class="category-grid">
-                        <select id="fCategory" class="col-span-2 p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none transition-all">
-                            <option value="">Выберите категорию</option>
-                            <option value="Напитки">Напитки</option>
-                            <option value="Сладости">Сладости</option>
-                            <option value="Канцелярия">Канцелярия</option>
-                            <option value="Выпечка">Выпечка</option>
-                            <option value="Печенье">Печенье</option>
-                            <option value="Еда">Еда</option>
-                            <option value="Гигиена">Гигиена</option>
-                            <option value="Молочные">Молочные</option>
-                            <option value="Закуски">Закуски</option>
-                            <option value="Фаст-фуд">Фаст-фуд</option>
-                            <option value="Фрукты">Фрукты</option>
-                            <option value="Другое">Другое</option>
-                            <option value="Услуга">Услуга</option>
-                        </select>
-                    </div>
+                    <select id="fCategory" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none appearance-none transition-all">
+                        <option value="">Выберите категорию</option>
+                        <option value="Напитки">Напитки</option>
+                        <option value="Сладости">Сладости</option>
+                        <option value="Канцелярия">Канцелярия</option>
+                        <option value="Выпечка">Выпечка</option>
+                        <option value="Печенье">Печенье</option>
+                        <option value="Еда">Еда</option>
+                        <option value="Гигиена">Гигиена</option>
+                        <option value="Молочные">Молочные</option>
+                        <option value="Закуски">Закуски</option>
+                        <option value="Фаст-фуд">Фаст-фуд</option>
+                        <option value="Фрукты">Фрукты</option>
+                        <option value="Косметика">Косметика</option>
+                        <option value="Аренда">Аренда</option>
+                        <option value="Другое">Другое</option>
+                        <option value="Услуга">Услуга</option>
+                    </select>
                     <div class="error-message" id="categoryError">Выберите категорию товара</div>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-bold text-sm">Описание товара (необязательно)</label>
+                    <textarea id="fDescription" placeholder="Описание товара..." rows="3" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block mb-2 font-bold text-sm">Состав (необязательно)</label>
+                    <textarea id="fComposition" placeholder="Состав товара..." rows="2" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
                 </div>
 
                 <div>
                     <label class="required-field block mb-2 font-bold text-sm">Номер телефона</label>
                     <input type="tel" id="fPhone" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                     <div class="error-message" id="phoneError">Укажите номер телефона</div>
+                </div>
+
+                <div>
+                    <label class="required-field block mb-2 font-bold text-sm">WhatsApp номер</label>
+                    <input type="tel" id="fWhatsapp" placeholder="+7 (7xx) xxx-xx-xx" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <div class="error-message" id="whatsappError">Укажите WhatsApp номер</div>
                 </div>
 
                 <div>
@@ -502,6 +635,7 @@
             </div>
         </div>
 
+        <!-- Detail Modal -->
         <div id="detailModal" class="fixed inset-0 bg-white z-50 hidden flex-col overflow-y-auto">
             <div class="p-4 flex items-center justify-between border-b sticky top-0 bg-white/90 backdrop-blur-md z-10">
                 <button onclick="toggleDetailModal(false)" class="text-blue-600 font-bold flex items-center gap-1 hover:scale-110 transition-transform">
@@ -513,29 +647,18 @@
             <div id="detailContent" class="detail-modal-content"></div>
         </div>
 
-        <div id="deleteModal" class="fixed inset-0 overlay z-50 hidden flex items-end">
-            <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
-                <h3 class="text-xl font-black mb-6">Удалить объявление?</h3>
-                <p class="text-gray-500 mb-6">Введите 5-значный код удаления</p>
-                <input type="tel" id="deleteCode" inputmode="numeric" placeholder="Код удаления" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none mb-4 transition-all">
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="closeDeleteModal()" class="py-4 rounded-2xl font-bold border border-gray-200 hover:bg-gray-50 transition-all">Отмена</button>
-                    <button onclick="confirmDelete()" class="py-4 rounded-2xl font-bold bg-red-500 text-white hover:bg-red-600 transition-all">Удалить</button>
+        <!-- Edit Modal -->
+        <div id="editModal" class="fixed inset-0 overlay z-50 hidden flex items-end">
+            <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
+                <h3 class="text-xl font-black mb-4">Редактировать объявление</h3>
+                <p class="text-gray-500 mb-4">Введите 5-значный код владельца</p>
+                <input type="tel" id="editCode" inputmode="numeric" placeholder="Код владельца" class="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none mb-4 transition-all">
+                <div id="editForm" class="hidden space-y-4"></div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <button onclick="closeEditModal()" class="py-4 rounded-2xl font-bold border border-gray-200 hover:bg-gray-50 transition-all">Отмена</button>
+                    <button id="editActionBtn" onclick="verifyEditCode()" class="py-4 rounded-2xl font-bold bg-blue-600 text-white hover:bg-blue-700 transition-all">Проверить</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="updatingScreen" class="fixed inset-0 bg-white z-50 hidden flex flex-col items-center justify-center">
-        <div class="text-center animate-fade-in">
-            <div class="mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-blue-600 mx-auto animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-            </div>
-            <h1 class="text-3xl font-black text-gray-800 mb-2">Сайтта обновления</h1>
-            <p class="text-gray-500 text-lg mb-8">Сайтта реконструкция жүріп жатыр</p>
-            <p class="text-gray-400 text-sm">Кешірек келіңіз...</p>
         </div>
     </div>
 
@@ -545,67 +668,114 @@
         const client = supabase.createClient(SB_URL, SB_KEY);
         const ADMIN_PASS = "55555";
 
-        // БАННЕРЛАР - КОД АРҚЫЛЫ ӨЗГЕРТУ
-
-        const BANNERS = [
-            { url: 'https://nesvizh.by/images/firm-news/932/banner.jpg', type: 'image' },
-            { url: 'https://rostov.reklama-gravity.ru/wp-content/uploads/2023/09/1_fxVUxHlAJr2axlQHEyjjNw.jpg', type: 'image' },
-            { url: 'https://avatars.mds.yandex.net/i?id=ed409b9db462783941078ea25317901aaadec7b2-1980598-images-thumbs&n=13', type: 'image' }
-            // Басқа баннерлар қосыңыз:
-            // { url: 'https://example.com/banner3.jpg', type: 'image' },
-            // { url: 'https://example.com/video.mp4', type: 'video' }
-        ];
-
         let allProducts = [];
+        let banners = [];
         let currentBannerIdx = 0;
         let currentCat = 'Все';
-        let deleteData = null;
+        let editData = null;
+        let userLikes = [];
+        let bannerAutoPlayInterval = null;
 
-        function previewImg(input) {
-            const preview = document.getElementById('imgPreview');
-            const placeholder = document.getElementById('imgPlaceholder');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                }
-                reader.readAsDataURL(input.files[0]);
+        // User fingerprint for likes
+        function getUserFingerprint() {
+            let fp = localStorage.getItem('user_fingerprint');
+            if (!fp) {
+                fp = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('user_fingerprint', fp);
             }
+            return fp;
         }
 
+        // Image URL functions
+        function addImageUrl() {
+            const container = document.getElementById('imageUrlContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'url-item';
+            newItem.innerHTML = `
+                <input type="url" placeholder="https://example.com/image.jpg" class="image-url-input w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <button type="button" onclick="this.parentElement.remove(); updateImagePreviews();" class="bg-red-500 text-white hover:bg-red-600">×</button>
+            `;
+            container.appendChild(newItem);
+            newItem.querySelector('input').addEventListener('input', updateImagePreviews);
+        }
+
+        function updateImagePreviews() {
+            const container = document.getElementById('imagePreviewContainer');
+            const inputs = document.querySelectorAll('.image-url-input');
+            container.innerHTML = '';
+            inputs.forEach(input => {
+                if (input.value.trim()) {
+                    const img = document.createElement('img');
+                    img.src = input.value.trim();
+                    img.className = 'w-20 h-20 object-cover rounded-xl border-2 border-gray-200';
+                    img.onerror = () => img.remove();
+                    container.appendChild(img);
+                }
+            });
+        }
+
+        function getImageUrls() {
+            const inputs = document.querySelectorAll('.image-url-input');
+            return Array.from(inputs).map(i => i.value.trim()).filter(url => url);
+        }
+
+        // Phone formatting
+        function formatPhone(input) {
+            let x = input.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            input.value = !x[2] ? x[1] : `+7 (${x[2]}) ${x[3]}${x[4] ? '-' + x[4] : ''}${x[5] ? '-' + x[5] : ''}`;
+        }
+
+        document.getElementById('fPrice').addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/[^\d]/g, '');
+        });
+        document.getElementById('fPhone').addEventListener('input', e => formatPhone(e.target));
+        document.getElementById('fWhatsapp').addEventListener('input', e => formatPhone(e.target));
+        document.getElementById('fRoom').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3));
+        document.getElementById('fOwnerCode').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5));
+        document.getElementById('searchInput').addEventListener('input', render);
+
+        document.querySelectorAll('.image-url-input').forEach(input => {
+            input.addEventListener('input', updateImagePreviews);
+        });
+
+        // Load data
         async function loadData() {
-            const { data: prods, error: prodErr } = await client.from('products').select('*').order('created_at', { ascending: false });
-            if (!prodErr) allProducts = prods;
+            const { data: prods } = await client.from('products').select('*').order('created_at', { ascending: false });
+            if (prods) allProducts = prods;
             
+            const { data: bannerData } = await client.from('banners').select('*').eq('is_active', true).order('sort_order');
+            if (bannerData && bannerData.length > 0) {
+                banners = bannerData;
+            } else {
+                banners = [
+                    { url: 'https://nesvizh.by/images/firm-news/932/banner.jpg', type: 'image' },
+                    { url: 'https://rostov.reklama-gravity.ru/wp-content/uploads/2023/09/1_fxVUxHlAJr2axlQHEyjjNw.jpg', type: 'image' }
+                ];
+            }
+            
+            await loadUserLikes();
             render();
             updateBanner();
             startBannerAutoPlay();
         }
 
-        let bannerAutoPlayInterval = null;
-
-        function startBannerAutoPlay() {
-            if (BANNERS.length > 1) {
-                if (bannerAutoPlayInterval) clearInterval(bannerAutoPlayInterval);
-                bannerAutoPlayInterval = setInterval(() => {
-                    nextBanner();
-                }, 10000); // 10 секунд
-            }
+        async function loadUserLikes() {
+            const fp = getUserFingerprint();
+            const { data } = await client.from('product_likes').select('product_id').eq('user_fingerprint', fp);
+            if (data) userLikes = data.map(l => l.product_id);
         }
 
-        function stopBannerAutoPlay() {
-            if (bannerAutoPlayInterval) {
-                clearInterval(bannerAutoPlayInterval);
-                bannerAutoPlayInterval = null;
+        // Banner functions
+        function startBannerAutoPlay() {
+            if (banners.length > 1) {
+                if (bannerAutoPlayInterval) clearInterval(bannerAutoPlayInterval);
+                bannerAutoPlayInterval = setInterval(nextBanner, 10000);
             }
         }
 
         function updateBanner() {
-            if (BANNERS.length === 0) return;
-            
-            const banner = BANNERS[currentBannerIdx % BANNERS.length];
+            if (banners.length === 0) return;
+            const banner = banners[currentBannerIdx % banners.length];
             const slide = document.getElementById('bannerSlide');
             
             if (banner.type === 'image') {
@@ -614,7 +784,6 @@
                 newImg.className = 'banner-slide';
                 newImg.src = banner.url;
                 newImg.alt = 'Banner';
-                newImg.style.animation = 'bannerFadeIn 0.8s ease-in-out';
                 slide.replaceWith(newImg);
             } else if (banner.type === 'video') {
                 const newVideo = document.createElement('video');
@@ -623,7 +792,6 @@
                 newVideo.autoplay = true;
                 newVideo.muted = true;
                 newVideo.loop = true;
-                newVideo.style.animation = 'bannerFadeIn 0.8s ease-in-out';
                 const source = document.createElement('source');
                 source.src = banner.url;
                 source.type = 'video/mp4';
@@ -632,119 +800,169 @@
             }
 
             updateBannerDots();
-            stopBannerAutoPlay();
-            startBannerAutoPlay();
         }
 
         function updateBannerDots() {
             const dotsContainer = document.getElementById('bannerDots');
-            if (!dotsContainer || BANNERS.length === 0) return;
-            
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < BANNERS.length; i++) {
+            banners.forEach((_, i) => {
                 const dot = document.createElement('button');
-                dot.className = `w-2 h-2 rounded-full transition-all duration-500 ${i === currentBannerIdx % BANNERS.length ? 'bg-blue-600 w-8' : 'bg-gray-300 hover:bg-gray-400'}`;
-                dot.onclick = (e) => {
-                    e.stopPropagation();
-                    currentBannerIdx = i;
-                    updateBanner();
-                };
+                dot.className = `w-2 h-2 rounded-full transition-all duration-500 ${i === currentBannerIdx % banners.length ? 'bg-blue-600 w-8' : 'bg-gray-300'}`;
+                dot.onclick = () => { currentBannerIdx = i; updateBanner(); };
                 dotsContainer.appendChild(dot);
-            }
+            });
         }
 
         function nextBanner() {
-            if (BANNERS.length === 0) return;
-            currentBannerIdx = (currentBannerIdx + 1) % BANNERS.length;
+            if (banners.length === 0) return;
+            currentBannerIdx = (currentBannerIdx + 1) % banners.length;
             updateBanner();
         }
 
         function prevBanner() {
-            if (BANNERS.length === 0) return;
-            currentBannerIdx = (currentBannerIdx - 1 + BANNERS.length) % BANNERS.length;
+            if (banners.length === 0) return;
+            currentBannerIdx = (currentBannerIdx - 1 + banners.length) % banners.length;
             updateBanner();
         }
 
-        document.getElementById('fPrice').addEventListener('input', e => {
-            e.target.value = e.target.value.replace(/[^\d]/g, '');
-        });
+        // Enhanced Like functions with beautiful animations
+        function createLikeEffects(btn) {
+            // Ripple effect
+            const ripple = document.createElement('div');
+            ripple.className = 'like-ripple animate-ripple';
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
 
-        document.getElementById('fPhone').addEventListener('input', e => {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            e.target.value = !x[2] ? x[1] : `+7 (${x[2]}) ${x[3]}${x[4] ? '-' + x[4] : ''}${x[5] ? '-' + x[5] : ''}`;
-        });
-        document.getElementById('fRoom').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 3));
-        document.getElementById('fOwnerCode').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5));
-        document.getElementById('searchInput').addEventListener('input', render);
+            // Burst effect
+            const burst = document.createElement('div');
+            burst.className = 'like-burst animate-heart-burst';
+            btn.appendChild(burst);
+            setTimeout(() => burst.remove(), 500);
 
+            // Floating hearts
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart animate-float-up';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = `${Math.random() * 30 - 15}px`;
+                    heart.style.top = '-10px';
+                    btn.appendChild(heart);
+                    setTimeout(() => heart.remove(), 800);
+                }, i * 80);
+            }
+
+            // Sparkles
+            const sparklePositions = [
+                { top: '-15px', left: '-15px' },
+                { top: '-15px', right: '-15px' },
+                { top: '50%', left: '-20px' },
+                { top: '50%', right: '-20px' },
+                { bottom: '-15px', left: '-15px' },
+                { bottom: '-15px', right: '-15px' }
+            ];
+
+            sparklePositions.forEach((pos, i) => {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle animate-sparkle';
+                    Object.assign(sparkle.style, pos);
+                    btn.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 600);
+                }, i * 50);
+            });
+        }
+
+        async function toggleLike(productId, event) {
+            event.stopPropagation();
+            const fp = getUserFingerprint();
+            const btn = event.currentTarget;
+            const isLiked = userLikes.includes(productId);
+
+            // Add pop animation
+            btn.classList.add('animate-heart-pop');
+            setTimeout(() => btn.classList.remove('animate-heart-pop'), 600);
+
+            if (isLiked) {
+                // Unlike
+                await client.from('product_likes').delete().eq('product_id', productId).eq('user_fingerprint', fp);
+                const product = allProducts.find(p => p.id === productId);
+                await client.from('products').update({ likes: Math.max(0, (product?.likes || 1) - 1) }).eq('id', productId);
+                userLikes = userLikes.filter(id => id !== productId);
+                btn.classList.remove('liked');
+            } else {
+                // Like with effects
+                createLikeEffects(btn);
+                
+                await client.from('product_likes').insert({ product_id: productId, user_fingerprint: fp });
+                const product = allProducts.find(p => p.id === productId);
+                await client.from('products').update({ likes: (product?.likes || 0) + 1 }).eq('id', productId);
+                userLikes.push(productId);
+                btn.classList.add('liked');
+            }
+
+            // Refresh data
+            loadData();
+        }
+
+        // Form validation
         function hideAllErrors() {
             document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
         }
 
         function showError(fieldId) {
-            const el = document.getElementById(fieldId);
-            if (el) el.classList.add('show');
+            document.getElementById(fieldId)?.classList.add('show');
         }
 
         function validateForm() {
             hideAllErrors();
             let valid = true;
 
-            if (!document.getElementById('fImage').files[0]) {
-                showError('imgError');
-                valid = false;
-            }
-            if (!document.getElementById('fTitle').value.trim()) {
-                showError('titleError');
-                valid = false;
-            }
-            if (!document.getElementById('fPrice').value) {
-                showError('priceError');
-                valid = false;
-            }
-            if (!document.getElementById('fCategory').value) {
-                showError('categoryError');
-                valid = false;
-            }
-            if (!document.getElementById('fPhone').value || document.getElementById('fPhone').value.replace(/\D/g, '').length < 11) {
-                showError('phoneError');
-                valid = false;
-            }
-            if (document.getElementById('fRoom').value.length !== 3) {
-                showError('roomError');
-                valid = false;
-            }
-            if (document.getElementById('fOwnerCode').value.length !== 5) {
-                showError('codeError');
-                valid = false;
-            }
-            if (!document.getElementById('fAdminCode').value) {
-                showError('adminError');
-                valid = false;
-            }
+            if (getImageUrls().length === 0) { showError('imgError'); valid = false; }
+            if (!document.getElementById('fTitle').value.trim()) { showError('titleError'); valid = false; }
+            if (!document.getElementById('fPrice').value) { showError('priceError'); valid = false; }
+            if (!document.getElementById('fCategory').value) { showError('categoryError'); valid = false; }
+            if (!document.getElementById('fPhone').value || document.getElementById('fPhone').value.replace(/\D/g, '').length < 11) { showError('phoneError'); valid = false; }
+            if (!document.getElementById('fWhatsapp').value || document.getElementById('fWhatsapp').value.replace(/\D/g, '').length < 11) { showError('whatsappError'); valid = false; }
+            if (document.getElementById('fRoom').value.length !== 3) { showError('roomError'); valid = false; }
+            if (document.getElementById('fOwnerCode').value.length !== 5) { showError('codeError'); valid = false; }
+            if (!document.getElementById('fAdminCode').value) { showError('adminError'); valid = false; }
 
             return valid;
         }
 
         function toggleAddModal(s) {
             document.getElementById('addModal').classList.toggle('hidden', !s);
-            if(!s) resetForm();
+            if (!s) resetForm();
         }
-        function toggleDetailModal(s) { document.getElementById('detailModal').classList.toggle('hidden', !s); }
+
+        function toggleDetailModal(s) {
+            document.getElementById('detailModal').classList.toggle('hidden', !s);
+        }
 
         function resetForm() {
             document.getElementById('fTitle').value = "";
             document.getElementById('fPrice').value = "";
             document.getElementById('fCategory').value = "";
+            document.getElementById('fDescription').value = "";
+            document.getElementById('fComposition').value = "";
             document.getElementById('fPhone').value = "";
+            document.getElementById('fWhatsapp').value = "";
             document.getElementById('fRoom').value = "";
             document.getElementById('fOwnerCode').value = "";
             document.getElementById('fAdminCode').value = "";
-            document.getElementById('fImage').value = "";
-            document.getElementById('imgPreview').src = "";
-            document.getElementById('imgPreview').classList.add('hidden');
-            document.getElementById('imgPlaceholder').classList.remove('hidden');
+            document.getElementById('imageUrlContainer').innerHTML = `
+                <div class="url-item">
+                    <input type="url" placeholder="https://example.com/image.jpg" class="image-url-input w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <button type="button" onclick="addImageUrl()" class="bg-blue-600 text-white hover:bg-blue-700">+</button>
+                </div>
+            `;
+            document.getElementById('imagePreviewContainer').innerHTML = '';
             hideAllErrors();
+            
+            document.querySelectorAll('.image-url-input').forEach(input => {
+                input.addEventListener('input', updateImagePreviews);
+            });
 
             const btn = document.getElementById('submitBtn');
             btn.className = "w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl";
@@ -766,212 +984,383 @@
 
             const btn = document.getElementById('submitBtn');
             const adminInput = document.getElementById('fAdminCode').value;
-            const imgFile = document.getElementById('fImage').files[0];
 
-            if (adminInput !== ADMIN_PASS) return showErrorModal("Неверный админ пароль!");
+            if (adminInput !== ADMIN_PASS) {
+                showErrorModal("Неверный админ пароль!");
+                return;
+            }
 
-            showUpdatingScreen();
+            btn.disabled = true;
+            btn.innerText = "ПУБЛИКУЕТСЯ...";
+            btn.className = "w-full bg-yellow-500 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl cursor-not-allowed";
 
             try {
-                const fileName = `${Date.now()}_${imgFile.name}`;
-                const { error: imgErr } = await client.storage.from('product photo').upload(fileName, imgFile);
-                if (imgErr) throw imgErr;
-
-                const { data: publicUrl } = client.storage.from('product photo').getPublicUrl(fileName);
+                const images = getImageUrls();
+                const imageUrl = images[0] || '';
 
                 const { error: dbErr } = await client.from('products').insert([{
                     title: document.getElementById('fTitle').value,
                     price: parseInt(document.getElementById('fPrice').value),
                     category: document.getElementById('fCategory').value,
+                    description: document.getElementById('fDescription').value || null,
+                    composition: document.getElementById('fComposition').value || null,
                     phone: document.getElementById('fPhone').value,
+                    whatsapp: document.getElementById('fWhatsapp').value,
                     room_number: document.getElementById('fRoom').value,
                     owner_code: document.getElementById('fOwnerCode').value,
-                    image_url: publicUrl.publicUrl,
-                    is_hit: false
+                    image_url: imageUrl,
+                    images: images,
+                    is_hit: false,
+                    likes: 0
                 }]);
+
                 if (dbErr) throw dbErr;
 
+                btn.innerText = "ОПУБЛИКОВАНО ✓";
+                btn.className = "w-full bg-green-500 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl cursor-not-allowed";
+
                 setTimeout(() => {
-                    hideUpdatingScreen();
                     toggleAddModal(false);
                     loadData();
-                }, 2000);
+                }, 3000);
 
             } catch (err) {
-                hideUpdatingScreen();
                 showErrorModal("Ошибка: " + err.message);
+                btn.innerText = "ОПУБЛИКОВАТЬ";
+                btn.className = "w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black text-lg shadow-xl active:scale-95 transition-all duration-300 hover:shadow-2xl";
+                btn.disabled = false;
             }
         }
 
         function showErrorModal(msg) {
             const modal = document.createElement('div');
-            modal.className = "fixed inset-0 overlay z-50 flex items-end";
+            modal.className = "fixed inset-0 overlay z-[60] flex items-end";
             modal.innerHTML = `
                 <div class="w-full bg-white rounded-t-[2.5rem] p-6 animate-slide-up">
                     <p class="text-center font-bold text-gray-800 mb-4">${msg}</p>
-                    <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all">Понял</button>
+                    <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">Понял</button>
                 </div>
             `;
             document.body.appendChild(modal);
         }
 
-        function getRandomRelated(allProds, currentProd, limit = 6) {
-            // Бірінші, бір категорияның товарларын табу
-            let similar = allProds.filter(p => p.id !== currentProd.id && p.category === currentProd.category);
+        // Get related products (6 total, fill from other categories if needed)
+        function getRelatedProducts(currentProduct) {
+            const TOTAL_RELATED = 6;
+            let related = [];
             
-            // Егер категорияда басқа товар болмаса, барлық товардан таңдау
-            if (similar.length === 0) {
-                similar = allProds.filter(p => p.id !== currentProd.id);
-            } else if (similar.length < limit) {
-                // Егер категорияда 6-дан аз болса, басқа категориялардан қосу
-                const otherProducts = allProds.filter(p => 
-                    p.id !== currentProd.id && 
-                    p.category !== currentProd.category &&
-                    !similar.find(s => s.id === p.id)
+            // First, get products from same category
+            const sameCategory = allProducts.filter(p => 
+                p.id !== currentProduct.id && p.category === currentProduct.category
+            );
+            related = [...sameCategory];
+            
+            // If not enough, add from other categories
+            if (related.length < TOTAL_RELATED) {
+                const otherCategories = allProducts.filter(p => 
+                    p.id !== currentProduct.id && 
+                    p.category !== currentProduct.category &&
+                    !related.find(r => r.id === p.id)
                 );
-                similar = similar.concat(otherProducts.slice(0, limit - similar.length));
+                
+                // Sort by likes (most popular first)
+                otherCategories.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                
+                const needed = TOTAL_RELATED - related.length;
+                related = [...related, ...otherCategories.slice(0, needed)];
             }
             
-            // Аралау
-            for (let i = similar.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [similar[i], similar[j]] = [similar[j], similar[i]];
-            }
-            
-            return similar.slice(0, limit);
+            return related.slice(0, TOTAL_RELATED);
         }
 
         function openDetail(p) {
-            const relatedProducts = getRandomRelated(allProducts, p, 6);
-            
+            const images = p.images && p.images.length > 0 ? p.images : [p.image_url];
+            const isLiked = userLikes.includes(p.id);
+            const whatsappNum = (p.whatsapp || p.phone).replace(/\D/g, '');
+
             document.getElementById('detailContent').innerHTML = `
                 <div class="relative overflow-hidden">
-                    <img src="${p.image_url}" class="w-full h-[500px] object-cover shadow-lg animate-fade-in">
+                    <img id="mainDetailImage" src="${images[0]}" class="w-full h-[400px] object-cover shadow-lg animate-fade-in">
+                    <button onclick="toggleLike(${p.id}, event)" class="detail-like-btn ${isLiked ? 'liked' : ''}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="${isLiked ? 'white' : 'none'}" viewBox="0 0 24 24" stroke="${isLiked ? 'white' : 'currentColor'}">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+                    <div class="like-count ${isLiked ? 'liked-count' : ''}" style="top: 16px; left: 16px;">
+                        <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <span>${p.likes || 0}</span>
+                    </div>
                 </div>
+                
+                ${images.length > 1 ? `
+                <div class="px-4 mt-3">
+                    <div class="image-gallery">
+                        ${images.map((img, i) => `<img src="${img}" onclick="document.getElementById('mainDetailImage').src='${img}'; document.querySelectorAll('.image-gallery img').forEach(i=>i.classList.remove('active')); this.classList.add('active');" class="${i === 0 ? 'active' : ''}">`).join('')}
+                    </div>
+                </div>
+                ` : ''}
+                
                 <div class="p-6 animate-slide-up">
-                    <h1 class="text-2xl font-black text-gray-800 leading-tight mb-3">${p.title}</h1>
+                    <span class="text-xs font-bold text-blue-500 uppercase">${p.category}</span>
+                    <h1 class="text-2xl font-black text-gray-800 leading-tight mb-2">${p.title}</h1>
                     <span class="text-3xl font-black text-blue-600">${p.price} ₸</span>
 
-                    <div class="mt-6 space-y-2">
-                        <div class="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-transparent rounded-xl border border-blue-100">
+                    ${p.description ? `
+                    <div class="mt-4 p-4 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-sm text-gray-500 mb-2">Описание</h3>
+                        <p class="text-gray-700">${p.description}</p>
+                    </div>
+                    ` : ''}
+
+                    ${p.composition ? `
+                    <div class="mt-3 p-4 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-sm text-gray-500 mb-2">Состав</h3>
+                        <p class="text-gray-700">${p.composition}</p>
+                    </div>
+                    ` : ''}
+
+                    <div class="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-500 font-medium">Номер комнаты</span>
-                            <span class="font-bold text-gray-800 bg-white px-3 py-1 rounded-lg shadow-sm text-base">${p.room_number}</span>
+                            <span class="font-bold text-gray-800 bg-white px-3 py-1 rounded-lg shadow-sm">${p.room_number}</span>
                         </div>
                     </div>
 
-                    <a href="tel:${p.phone}" class="mt-6 w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-[2rem] flex items-center justify-center gap-2 font-black text-lg shadow-xl shadow-blue-300 active:scale-95 hover:shadow-2xl transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                        Позвонить
-                    </a>
+                    <div class="grid grid-cols-2 gap-3 mt-6">
+                        <a href="tel:${p.phone}" class="bg-blue-600 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-bold active:scale-95 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            Позвонить
+                        </a>
+                        <a href="https://wa.me/${whatsappNum}" target="_blank" class="bg-green-500 text-white py-4 rounded-2xl flex items-center justify-center gap-2 font-bold active:scale-95 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp
+                        </a>
+                    </div>
 
-                    <button onclick="openDeleteModal('${p.id}', '${p.owner_code}')" class="mt-3 w-full text-red-500 font-bold text-xs uppercase tracking-wide opacity-70 hover:opacity-100 transition-opacity">Удалить объявление</button>
+                    <button onclick="openEditModal('${p.id}', '${p.owner_code}')" class="mt-4 w-full text-blue-600 font-bold text-sm uppercase tracking-wide py-3 border-2 border-blue-600 rounded-2xl hover:bg-blue-50 transition-all">
+                        Редактировать объявление
+                    </button>
 
-                    <div class="mt-10 mb-8" id="relatedSection">
+                    <div class="mt-10 mb-8">
                         <h3 class="font-black text-base mb-3 text-gray-800">Похожие товары</h3>
                         <div class="grid grid-cols-2 gap-4" id="relBox"></div>
                     </div>
                 </div>
             `;
+
+            // Related products (6 total)
+            const related = getRelatedProducts(p);
             const relBox = document.getElementById('relBox');
-            
-            if (relatedProducts.length > 0) {
-                relatedProducts.forEach((r, index) => {
-                    const d = document.createElement('div');
-                    d.className = "related-card stagger-item";
-                    d.style.animationDelay = `${0.08 * index}s`;
-                    d.onclick = () => { openDetail(r); document.getElementById('detailModal').scrollTop = 0; };
-                    d.innerHTML = `
-                        <img src="${r.image_url}" class="animate-fade-in">
-                        <div class="related-card-content">
-                            <p class="text-xs font-bold text-gray-800 mb-auto line-clamp-2">${r.title}</p>
-                            <p class="text-sm font-black text-blue-600 mb-2">${r.price} ₸</p>
-                            <div class="related-category-badge">${r.category}</div>
+            related.forEach((r, i) => {
+                const rIsLiked = userLikes.includes(r.id);
+                const d = document.createElement('div');
+                d.className = "related-card stagger-item";
+                d.style.animationDelay = `${0.08 * i}s`;
+                d.onclick = () => { openDetail(r); document.getElementById('detailModal').scrollTop = 0; };
+                d.innerHTML = `
+                    <div class="relative">
+                        <img src="${r.image_url}">
+                        <div class="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-1 text-xs font-bold flex items-center gap-1" style="font-size:10px;">
+                            <svg class="w-3 h-3 ${rIsLiked ? 'text-red-500' : 'text-gray-400'}" fill="${rIsLiked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                            ${r.likes || 0}
                         </div>
-                    `;
-                    relBox.appendChild(d);
-                });
-            }
+                    </div>
+                    <div class="related-card-content">
+                        <p class="text-xs font-bold text-gray-800 mb-auto line-clamp-2">${r.title}</p>
+                        <p class="text-sm font-black text-blue-600 mb-2">${r.price} ₸</p>
+                        <div class="related-category-badge">${r.category}</div>
+                    </div>
+                `;
+                relBox.appendChild(d);
+            });
+
             toggleDetailModal(true);
         }
 
-        function openDeleteModal(id, code) {
-            deleteData = { id, code };
-            document.getElementById('deleteCode').value = "";
-            document.getElementById('deleteModal').classList.remove('hidden');
+        // Edit functions
+        function openEditModal(id, code) {
+            editData = { id, code };
+            document.getElementById('editCode').value = "";
+            document.getElementById('editForm').classList.add('hidden');
+            document.getElementById('editActionBtn').innerText = "Проверить";
+            document.getElementById('editActionBtn').onclick = verifyEditCode;
+            document.getElementById('editModal').classList.remove('hidden');
         }
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-            deleteData = null;
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            editData = null;
         }
 
-        async function confirmDelete() {
-            if (!deleteData) return;
-            const input = document.getElementById('deleteCode').value;
-            if (input === deleteData.code) {
-                await client.from('products').delete().eq('id', deleteData.id);
-                closeDeleteModal();
-                toggleDetailModal(false);
-                loadData();
-            } else if(input) {
+        function verifyEditCode() {
+            if (!editData) return;
+            const input = document.getElementById('editCode').value;
+            if (input === editData.code) {
+                const product = allProducts.find(p => p.id == editData.id);
+                if (!product) return;
+
+                const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
+
+                document.getElementById('editForm').innerHTML = `
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Название</label>
+                        <input type="text" id="editTitle" value="${product.title}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Цена (₸)</label>
+                        <input type="number" id="editPrice" value="${product.price}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Категория</label>
+                        <select id="editCategory" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                            ${['Напитки','Сладости','Канцелярия','Выпечка','Печенье','Еда','Гигиена','Молочные','Закуски','Фаст-фуд','Фрукты','Косметика','Аренда','Другое','Услуга'].map(c => `<option value="${c}" ${product.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Описание</label>
+                        <textarea id="editDescription" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${product.description || ''}</textarea>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Состав</label>
+                        <textarea id="editComposition" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${product.composition || ''}</textarea>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Фото (URL, через запятую)</label>
+                        <textarea id="editImages" rows="2" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none resize-none">${images.join(', ')}</textarea>
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">Телефон</label>
+                        <input type="tel" id="editPhone" value="${product.phone}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                    </div>
+                    <div>
+                        <label class="block mb-2 font-bold text-sm">WhatsApp</label>
+                        <input type="tel" id="editWhatsapp" value="${product.whatsapp || ''}" class="w-full p-3 bg-gray-50 rounded-xl ring-1 ring-gray-200 outline-none">
+                    </div>
+                    <button onclick="deleteProduct()" class="w-full py-3 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-all mt-2">
+                        Удалить объявление
+                    </button>
+                `;
+                document.getElementById('editForm').classList.remove('hidden');
+                document.getElementById('editActionBtn').innerText = "Сохранить";
+                document.getElementById('editActionBtn').onclick = saveEdit;
+            } else if (input) {
                 showErrorModal("Неверный код!");
             }
         }
 
+        async function saveEdit() {
+            if (!editData) return;
+
+            const imagesText = document.getElementById('editImages').value;
+            const images = imagesText.split(',').map(s => s.trim()).filter(s => s);
+
+            const { error } = await client.from('products').update({
+                title: document.getElementById('editTitle').value,
+                price: parseInt(document.getElementById('editPrice').value),
+                category: document.getElementById('editCategory').value,
+                description: document.getElementById('editDescription').value || null,
+                composition: document.getElementById('editComposition').value || null,
+                phone: document.getElementById('editPhone').value,
+                whatsapp: document.getElementById('editWhatsapp').value,
+                image_url: images[0] || '',
+                images: images
+            }).eq('id', editData.id);
+
+            if (!error) {
+                showErrorModal("✓ Сохранено!");
+                closeEditModal();
+                toggleDetailModal(false);
+                loadData();
+            } else {
+                showErrorModal("Ошибка: " + error.message);
+            }
+        }
+
+        async function deleteProduct() {
+            if (!editData) return;
+            if (!confirm('Удалить объявление?')) return;
+
+            const { error } = await client.from('products').delete().eq('id', editData.id);
+            if (!error) {
+                showErrorModal("✓ Удалено!");
+                closeEditModal();
+                toggleDetailModal(false);
+                loadData();
+            }
+        }
+
+        // Render
         function render() {
             const search = document.getElementById('searchInput').value.toLowerCase();
+            const sort = document.getElementById('sortSelect').value;
             const hitBox = document.getElementById('hitList');
             const proBox = document.getElementById('productList');
-            hitBox.innerHTML = ""; 
+            hitBox.innerHTML = "";
             proBox.innerHTML = "";
 
-            // ХИТЫ ПРОДАЖ - is_hit true болғандарын тапу
+            // Hits
             let hitProducts = allProducts.filter(p => p.is_hit === true);
-            
-            // Егер хит өнім болмаса, ең соңғы 10 өнімді қосу
-            if (hitProducts.length === 0) {
-                hitProducts = allProducts.slice(0, 10);
-            } else {
-                hitProducts = hitProducts.slice(0, 10);
-            }
+            if (hitProducts.length === 0) hitProducts = allProducts.slice(0, 10);
 
-            hitProducts.forEach((p, index) => {
+            hitProducts.forEach((p, i) => {
+                const isLiked = userLikes.includes(p.id);
                 const d = document.createElement('div');
                 d.className = "hit-card p-3 cursor-pointer stagger-item";
-                d.style.animationDelay = `${0.08 * index}s`;
+                d.style.animationDelay = `${0.08 * i}s`;
                 d.onclick = () => openDetail(p);
                 d.innerHTML = `
-                    <img src="${p.image_url}">
+                    <div class="relative">
+                        <img src="${p.image_url}">
+                        <div class="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-1 text-xs font-bold flex items-center gap-1" style="font-size:10px;">
+                            <svg class="w-3 h-3 ${isLiked ? 'text-red-500' : 'text-gray-400'}" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                            ${p.likes || 0}
+                        </div>
+                    </div>
                     <div class="px-1">
-                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-tighter truncate">${p.category}</p>
-                        <p class="text-xs font-bold text-gray-800 truncate leading-tight mb-1">${p.title}</p>
+                        <p class="text-[10px] font-bold text-blue-500 uppercase truncate">${p.category}</p>
+                        <p class="text-xs font-bold text-gray-800 truncate">${p.title}</p>
                         <p class="text-blue-600 text-sm font-black">${p.price} ₸</p>
                     </div>
                 `;
                 hitBox.appendChild(d);
             });
 
-            const filteredProducts = allProducts.filter(p => (currentCat === 'Все' || p.category === currentCat) && p.title.toLowerCase().includes(search));
-            
-            if (filteredProducts.length === 0) {
+            // Filter and sort
+            let filtered = allProducts.filter(p => (currentCat === 'Все' || p.category === currentCat) && p.title.toLowerCase().includes(search));
+
+            if (sort === 'price_asc') filtered.sort((a, b) => a.price - b.price);
+            else if (sort === 'price_desc') filtered.sort((a, b) => b.price - a.price);
+            else if (sort === 'popular') filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+
+            if (filtered.length === 0) {
                 proBox.innerHTML = `
                     <div class="col-span-2 flex flex-col items-center justify-center py-16 animate-fade-in">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                         </svg>
-                        <p class="text-gray-400 text-lg font-bold text-center">Товары в категории <span class="text-blue-600">"${currentCat}"</span> не найдены</p>
-                        <p class="text-gray-300 text-sm mt-2">Попробуйте выбрать другую категорию</p>
+                        <p class="text-gray-400 text-lg font-bold text-center">Товары не найдены</p>
                     </div>
                 `;
             } else {
-                filteredProducts.forEach((p, index) => {
+                filtered.forEach((p, i) => {
+                    const isLiked = userLikes.includes(p.id);
                     const d = document.createElement('div');
                     d.className = "product-card cursor-pointer stagger-item";
-                    d.style.animationDelay = `${0.1 * index}s`;
-                    d.onclick = () => openDetail(p);
+                    d.style.animationDelay = `${0.1 * i}s`;
                     d.innerHTML = `
-                        <img src="${p.image_url}">
-                        <div class="product-card-content">
+                        <div class="relative" onclick="openDetail(allProducts.find(pr => pr.id === ${p.id}))">
+                            <img src="${p.image_url}">
+                            <button onclick="toggleLike(${p.id}, event)" class="like-btn ${isLiked ? 'liked' : ''}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="${isLiked ? 'white' : 'none'}" viewBox="0 0 24 24" stroke="${isLiked ? 'white' : 'currentColor'}">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <div class="like-count ${isLiked ? 'liked-count' : ''}">
+                                <svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                                ${p.likes || 0}
+                            </div>
+                        </div>
+                        <div class="product-card-content" onclick="openDetail(allProducts.find(pr => pr.id === ${p.id}))">
                             <div>
                                 <p class="text-sm font-bold text-gray-800">${p.title}</p>
                                 <p class="text-lg font-black text-blue-600 mt-2">${p.price} ₸</p>
@@ -984,25 +1373,7 @@
             }
         }
 
-        function showUpdatingScreen() {
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('updatingScreen').classList.remove('hidden');
-        }
-
-        function hideUpdatingScreen() {
-            document.getElementById('updatingScreen').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-        }
-
-        // Мысалы: 5 секунд ішінде обновления аяқталсын
-
-        // showUpdatingScreen();
-        // setTimeout(() => {
-        //     hideUpdatingScreen();
-        // }, 10000000);
-
         loadData();
-
     </script>
 </body>
 </html>
